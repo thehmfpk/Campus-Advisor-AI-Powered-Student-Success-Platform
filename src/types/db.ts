@@ -101,6 +101,7 @@ export interface Job {
   tags: string[];
   experience_level: string | null;
   apply_url: string | null;
+  google_url?: string | null;
   posted_date: string | null;
   source: string | null;
   created_at: string;

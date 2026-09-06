@@ -13,6 +13,7 @@ import {
   Skeleton,
 } from '@/components/ui';
 import { useJobs } from './useJobs';
+import { googleJobsUrl } from '@/data/jobs';
 import { computeMatch } from '@/lib/matching';
 import { useProfile } from '@/features/profile/useProfile';
 import type { EmploymentType, Job } from '@/types/db';
@@ -30,19 +31,30 @@ function matchTone(score: number): 'success' | 'brand' | 'warning' {
   return 'warning';
 }
 
+function companyInitials(name: string): string {
+  return name.split(/\s+/).slice(0, 2).map((w) => w[0]?.toUpperCase() ?? '').join('');
+}
+
 function JobCard({ job, profile }: { job: Job; profile: Parameters<typeof computeMatch>[0] | null }) {
   const match = profile ? computeMatch(profile, job) : null;
+  const applyUrl = job.apply_url ?? googleJobsUrl(job.title, job.location ?? 'Pakistan');
+  const googleUrl = job.google_url ?? googleJobsUrl(job.title, job.location ?? 'Pakistan');
   return (
-    <Card>
+    <Card className="card-hover">
       <CardBody>
         <div className="flex items-start justify-between gap-3">
-          <div>
-            <h3 className="font-semibold text-fg">{job.title}</h3>
-            <p className="text-sm text-muted">{job.company}</p>
+          <div className="flex items-start gap-3">
+            <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-sm font-bold text-brand">
+              {companyInitials(job.company)}
+            </span>
+            <div>
+              <h3 className="font-semibold text-fg">{job.title}</h3>
+              <p className="text-sm text-muted">{job.company}</p>
+            </div>
           </div>
           {match && (
             <Badge tone={matchTone(match.score)}>
-              <Sparkles className="h-3 w-3" /> AI Match: {match.score}%
+              <Sparkles className="h-3 w-3" /> {match.score}%
             </Badge>
           )}
         </div>
@@ -71,15 +83,20 @@ function JobCard({ job, profile }: { job: Job; profile: Parameters<typeof comput
           </p>
         )}
 
-        <div className="mt-4 flex items-center justify-between">
+        <div className="mt-4 flex items-center justify-between gap-2">
           <span className="text-xs text-muted">
             {job.posted_date ? `Posted ${job.posted_date}` : ''}
           </span>
-          <a href={job.apply_url ?? '#'} target="_blank" rel="noreferrer">
-            <Button size="sm" variant="secondary">
-              Apply <ExternalLink className="h-3.5 w-3.5" />
-            </Button>
-          </a>
+          <div className="flex gap-2">
+            <a href={googleUrl} target="_blank" rel="noreferrer" title="Search on Google Jobs">
+              <Button size="sm" variant="ghost">Google</Button>
+            </a>
+            <a href={applyUrl} target="_blank" rel="noreferrer" title="Apply via LinkedIn Jobs">
+              <Button size="sm">
+                Apply on LinkedIn <ExternalLink className="h-3.5 w-3.5" />
+              </Button>
+            </a>
+          </div>
         </div>
       </CardBody>
     </Card>

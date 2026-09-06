@@ -62,7 +62,11 @@ async function seedRankings() {
 async function seedJobs() {
   console.log('→ Seeding jobs…');
   const { count } = await db.from('jobs').select('*', { count: 'exact', head: true });
-  if ((count ?? 0) === 0) await db.from('jobs').insert(SEED_JOBS);
+  if ((count ?? 0) === 0) {
+    // Strip client-only fields (google_url is derived at render time, not a column).
+    const rows = SEED_JOBS.map(({ google_url: _g, ...rest }) => rest);
+    await db.from('jobs').insert(rows);
+  }
 }
 
 async function seedNotes() {
