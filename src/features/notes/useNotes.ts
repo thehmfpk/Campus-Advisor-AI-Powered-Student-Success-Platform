@@ -8,14 +8,17 @@ export function useNotes() {
     queryKey: ['coding-notes'],
     queryFn: async (): Promise<CodingNote[]> => {
       if (supabase) {
-        const { data, error } = await supabase
-          .from('coding_notes')
-          .select('*')
-          .order('order', { ascending: true });
-        if (error) throw new Error(error.message);
-        if (data && data.length) return data as unknown as CodingNote[];
+        try {
+          const { data, error } = await supabase
+            .from('coding_notes')
+            .select('*')
+            .order('order', { ascending: true });
+          if (!error && data && data.length) return data as unknown as CodingNote[];
+        } catch {
+          /* table missing / not seeded — fall back to bundled notes */
+        }
       }
-      // Fallback so the reader works before the DB is seeded / configured.
+      // Bundled fallback so the reader always works (no migrations/seed needed).
       return SEED_NOTES.map((n, i) => ({ id: `seed-${i}`, ...n }));
     },
   });

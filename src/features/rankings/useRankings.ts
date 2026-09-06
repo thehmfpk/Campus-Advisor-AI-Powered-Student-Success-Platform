@@ -8,12 +8,15 @@ export function useRankings() {
     queryKey: ['rankings'],
     queryFn: async (): Promise<RankingRecord[]> => {
       if (supabase) {
-        const { data, error } = await supabase
-          .from('ranking_records')
-          .select('*')
-          .order('position', { ascending: true });
-        if (error) throw new Error(error.message);
-        if (data && data.length) return data as unknown as RankingRecord[];
+        try {
+          const { data, error } = await supabase
+            .from('ranking_records')
+            .select('*')
+            .order('position', { ascending: true });
+          if (!error && data && data.length) return data as unknown as RankingRecord[];
+        } catch {
+          /* table missing / not seeded — fall back to bundled rankings */
+        }
       }
       return SEED_RANKINGS.map((r, i) => ({ id: `seed-${i}`, ...r }));
     },

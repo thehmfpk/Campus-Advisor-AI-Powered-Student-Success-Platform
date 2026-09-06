@@ -23,22 +23,30 @@ export function useSocieties(profileId?: string) {
   return useQuery({
     queryKey: ['societies', profileId],
     queryFn: async (): Promise<Society[]> => {
-      if (!supabase) {
-        return SEED_SOCIETIES.map((s, i) => ({
-          id: `seed-${i}`,
-          ...s,
-          member_count: 0,
-          joined: false,
-        }));
-      }
-      const { data: rows, error } = await supabase.from('societies').select('*').order('name');
-      if (error) throw new Error(error.message);
-      const societies = rows ?? [];
+      const bundled = (): Society[] =>
+        SEED_SOCIETIES.map((s, i) => ({ id: `seed-${i}`, ...s, member_count: 0, joined: false }));
+      if (!supabase) return bundled();
 
-      // Member counts.
-      const { data: memberships } = await supabase
-        .from('society_memberships')
-        .select('society_id, profile_id');
+      let rows: Record<string, unknown>[] = [];
+      try {
+        const { data, error } = await supabase.from('societies').select('*').order('name');
+        if (error || !data || data.length === 0) return bundled();
+        rows = data as Record<string, unknown>[];
+      } catch {
+        return bundled();
+      }
+      const societies = rows;
+
+      // Member counts (defensive — table may not exist yet).
+      let memberships: { society_id: string; profile_id: string }[] = [];
+      try {
+        const { data } = await supabase
+          .from('society_memberships')
+          .select('society_id, profile_id');
+        memberships = (data ?? []) as { society_id: string; profile_id: string }[];
+      } catch {
+        memberships = [];
+      }
       const counts = new Map<string, number>();
       const mine = new Set<string>();
       for (const m of memberships ?? []) {

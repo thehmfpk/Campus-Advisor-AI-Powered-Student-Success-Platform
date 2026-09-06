@@ -23,14 +23,17 @@ function seedToJob(s: (typeof SEED_JOBS)[number], i: number): Job {
 export const seedJobsAdapter: JobsSourceAdapter = {
   async list() {
     if (supabase) {
-      const { data, error } = await supabase
-        .from('jobs')
-        .select('*')
-        .order('posted_date', { ascending: false });
-      if (error) throw new Error(error.message);
-      if (data && data.length) return data as unknown as Job[];
+      try {
+        const { data, error } = await supabase
+          .from('jobs')
+          .select('*')
+          .order('posted_date', { ascending: false });
+        if (!error && data && data.length) return data as unknown as Job[];
+      } catch {
+        /* table missing / not seeded — fall back to bundled jobs */
+      }
     }
-    // Fallback so the page works even before the DB is seeded / configured.
+    // Bundled fallback so the page always works (no migrations/seed needed).
     return SEED_JOBS.map(seedToJob);
   },
 };
