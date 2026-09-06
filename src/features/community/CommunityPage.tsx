@@ -13,14 +13,16 @@ import {
   Select,
   Skeleton,
 } from '@/components/ui';
+import { Tabs } from '@/components/ui';
 import { useProfile } from '@/features/profile/useProfile';
 import { moderatePost } from '@/lib/moderation';
 import { PostCard } from './PostCard';
+import { SocietiesTab } from './SocietiesTab';
 import { POST_CATEGORIES } from './categories';
 import { useCreatePost, usePosts } from './useCommunity';
 import type { PostCategory } from '@/types/db';
 
-export default function CommunityPage() {
+function FeedTab() {
   const { data: profile } = useProfile();
   const { data: posts, isLoading, isError, refetch } = usePosts(profile?.id);
   const createPost = useCreatePost(profile?.id, profile?.university_name);
@@ -61,11 +63,6 @@ export default function CommunityPage() {
 
   return (
     <div>
-      <PageHeader
-        title="University Community"
-        description="Connect with students across Pakistani universities. Share opportunities, events, and more."
-      />
-
       {/* Composer */}
       <Card className="mb-6">
         <CardBody>
@@ -142,6 +139,27 @@ export default function CommunityPage() {
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+export default function CommunityPage() {
+  const [tab, setTab] = useState('feed');
+  return (
+    <div>
+      <PageHeader
+        title="University Community"
+        description="Connect with students across universities. Share posts and join societies like GDGoC, AWS & GitHub."
+      />
+      <Tabs
+        active={tab}
+        onChange={setTab}
+        tabs={[
+          { key: 'feed', label: 'Feed', icon: <Send className="h-4 w-4" /> },
+          { key: 'societies', label: 'Societies & Clubs', icon: <Users className="h-4 w-4" /> },
+        ]}
+      />
+      {tab === 'feed' ? <FeedTab /> : <SocietiesTab />}
     </div>
   );
 }

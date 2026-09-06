@@ -11,6 +11,7 @@ import { SEED_UNIVERSITIES, COMMON_DEPARTMENTS } from '../src/data/universities'
 import { SEED_RANKINGS } from '../src/data/rankings';
 import { SEED_JOBS } from '../src/data/jobs';
 import { SEED_NOTES } from '../src/data/codingNotes';
+import { SEED_SOCIETIES } from '../src/data/societies';
 
 const url = process.env.VITE_SUPABASE_URL;
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -73,6 +74,13 @@ async function seedNotes() {
   console.log('→ Seeding coding notes…');
   for (const note of SEED_NOTES) {
     await db.from('coding_notes').upsert(note, { onConflict: 'slug' });
+  }
+}
+
+async function seedSocieties() {
+  console.log('→ Seeding societies…');
+  for (const s of SEED_SOCIETIES) {
+    await db.from('societies').upsert(s, { onConflict: 'slug' });
   }
 }
 
@@ -190,6 +198,7 @@ async function main() {
   await seedRankings();
   await seedJobs();
   await seedNotes();
+  await seedSocieties();
   await seedDemoStudent();
   await seedAdmins();
   console.log('\n✅ Seed complete.');
