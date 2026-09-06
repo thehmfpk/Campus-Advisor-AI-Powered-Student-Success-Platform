@@ -13,7 +13,7 @@ export function useNotes() {
           .select('*')
           .order('order', { ascending: true });
         if (error) throw new Error(error.message);
-        if (data && data.length) return data as CodingNote[];
+        if (data && data.length) return data as unknown as CodingNote[];
       }
       // Fallback so the reader works before the DB is seeded / configured.
       return SEED_NOTES.map((n, i) => ({ id: `seed-${i}`, ...n }));

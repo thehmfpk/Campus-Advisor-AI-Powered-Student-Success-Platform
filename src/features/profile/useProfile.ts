@@ -21,7 +21,7 @@ export function useProfile() {
         .eq('user_id', user.id)
         .maybeSingle();
       if (error) throw new Error(error.message);
-      return data as StudentProfile | null;
+      return data as unknown as StudentProfile | null;
     },
   });
 }
@@ -38,7 +38,7 @@ export function useSubjects(profileId?: string) {
         .eq('profile_id', profileId)
         .order('created_at', { ascending: true });
       if (error) throw new Error(error.message);
-      return (data ?? []) as StudentSubject[];
+      return (data ?? []) as unknown as StudentSubject[];
     },
   });
 }

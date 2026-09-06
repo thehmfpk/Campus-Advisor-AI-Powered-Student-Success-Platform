@@ -13,7 +13,7 @@ export function useRankings() {
           .select('*')
           .order('position', { ascending: true });
         if (error) throw new Error(error.message);
-        if (data && data.length) return data as RankingRecord[];
+        if (data && data.length) return data as unknown as RankingRecord[];
       }
       return SEED_RANKINGS.map((r, i) => ({ id: `seed-${i}`, ...r }));
     },

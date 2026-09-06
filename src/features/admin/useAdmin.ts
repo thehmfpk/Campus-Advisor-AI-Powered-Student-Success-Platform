@@ -135,7 +135,7 @@ export function useAdminUniversities() {
       if (!supabase) return [];
       const { data, error } = await supabase.from('universities').select('*').order('name');
       if (error) throw new Error(error.message);
-      return (data ?? []) as University[];
+      return (data ?? []) as unknown as University[];
     },
   });
 }
@@ -171,7 +171,7 @@ export function useAdminJobs() {
       if (!supabase) return [];
       const { data, error } = await supabase.from('jobs').select('*').order('posted_date', { ascending: false });
       if (error) throw new Error(error.message);
-      return (data ?? []) as Job[];
+      return (data ?? []) as unknown as Job[];
     },
   });
 }
@@ -184,7 +184,7 @@ export function useAdminRankings() {
       if (!supabase) return [];
       const { data, error } = await supabase.from('ranking_records').select('*').order('position');
       if (error) throw new Error(error.message);
-      return (data ?? []) as RankingRecord[];
+      return (data ?? []) as unknown as RankingRecord[];
     },
   });
 }
@@ -217,7 +217,7 @@ export function useAdminFeatureRequests() {
         .select('*')
         .order('created_at', { ascending: false });
       if (error) throw new Error(error.message);
-      return (data ?? []) as FeatureRequest[];
+      return (data ?? []) as unknown as FeatureRequest[];
     },
   });
 }

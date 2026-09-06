@@ -34,7 +34,7 @@ export function useCv(profileId?: string) {
         .maybeSingle();
       if (error) throw new Error(error.message);
       if (!data) return null;
-      const { id: _id, profile_id: _pid, ...rest } = data as CvProfile;
+      const { id: _id, profile_id: _pid, ...rest } = data as unknown as CvProfile;
       return rest as CvData;
     },
   });

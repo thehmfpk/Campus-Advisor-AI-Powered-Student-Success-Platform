@@ -28,7 +28,7 @@ export const seedJobsAdapter: JobsSourceAdapter = {
         .select('*')
         .order('posted_date', { ascending: false });
       if (error) throw new Error(error.message);
-      if (data && data.length) return data as Job[];
+      if (data && data.length) return data as unknown as Job[];
     }
     // Fallback so the page works even before the DB is seeded / configured.
     return SEED_JOBS.map(seedToJob);
