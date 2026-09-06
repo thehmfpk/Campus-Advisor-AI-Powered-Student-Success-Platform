@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Design tokens (spec §19). HSL channel values so Tailwind can apply
+ * <alpha-value>. Palette: blue / light-blue / green / black / white.
+ */
+:root,
+[data-theme='light'] {
+  --brand: 217 91% 53%; /* blue */
+  --brand-soft: 214 95% 93%; /* light blue */
+  --brand-fg: 0 0% 100%;
+  --accent: 152 62% 40%; /* green */
+  --accent-fg: 0 0% 100%;
+
+  --bg: 210 40% 98%;
+  --surface: 0 0% 100%;
+  --surface-2: 210 40% 96%;
+  --border: 214 25% 88%;
+  --fg: 222 47% 11%;
+  --muted: 215 16% 47%;
+
+  --success: 152 62% 40%;
+  --danger: 0 72% 51%;
+  --warning: 38 92% 50%;
+}
+
+[data-theme='dark'] {
+  --brand: 213 94% 68%;
+  --brand-soft: 217 33% 20%;
+  --brand-fg: 222 47% 11%;
+  --accent: 152 58% 52%;
+  --accent-fg: 222 47% 11%;
+
+  --bg: 222 47% 8%;
+  --surface: 222 40% 11%;
+  --surface-2: 222 33% 15%;
+  --border: 217 24% 24%;
+  --fg: 210 40% 96%;
+  --muted: 215 20% 65%;
+
+  --success: 152 58% 52%;
+  --danger: 0 72% 60%;
+  --warning: 38 92% 58%;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-bg text-fg antialiased;
+  font-family:
+    'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+}
+
+/* Accessible focus ring for keyboard users (§19 accessibility). */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid hsl(var(--brand));
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Skeleton shimmer */
+.skeleton {
+  @apply relative overflow-hidden bg-surface-2;
+}
+.skeleton::after {
+  content: '';
+  @apply absolute inset-0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsl(var(--fg) / 0.06),
+    transparent
+  );
+  animation: shimmer 1.4s infinite;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  /* Print only the CV: hide everything, then reveal the print area. */
+  body.printing-cv * {
+    visibility: hidden !important;
+  }
+  body.printing-cv #cv-print-area,
+  body.printing-cv #cv-print-area * {
+    visibility: visible !important;
+  }
+  body.printing-cv #cv-print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    box-shadow: none !important;
+  }
+}
