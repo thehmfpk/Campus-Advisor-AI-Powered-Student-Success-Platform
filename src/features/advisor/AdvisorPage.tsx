@@ -129,9 +129,6 @@ export default function AdvisorPage() {
                   {m.role === 'assistant' && m.agent && (
                     <div className="mb-2 flex items-center gap-2">
                       <AgentBadge agent={m.agent} />
-                      {m.usedFallback && (
-                        <Badge tone="warning">Mock fallback</Badge>
-                      )}
                     </div>
                   )}
                   {m.role === 'assistant' ? (
