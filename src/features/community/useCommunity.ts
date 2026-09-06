@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
+import { DEMO_POSTS } from '@/data/demoPosts';
 import type { Comment, Post, PostCategory } from '@/types/db';
 
 interface PostRow {
@@ -29,22 +30,31 @@ function firstRelation<T>(rel: T | T[] | null | undefined): T | null {
 export function usePosts(myProfileId?: string) {
   return useQuery({
     queryKey: ['posts'],
-    enabled: Boolean(supabase),
     queryFn: async (): Promise<Post[]> => {
-      if (!supabase) return [];
-      const { data, error } = await supabase
-        .from('posts')
-        .select(
-          'id, author_id, university_name, category, content, image_url, status, likes_count, created_at, student_profiles(full_name, avatar_url)',
-        )
-        .eq('status', 'published')
-        .order('created_at', { ascending: false })
-        .limit(100);
-      if (error) throw new Error(error.message);
+      // Bundled demo posts so the feed is never empty (no seeding required).
+      if (!supabase) return DEMO_POSTS;
+
+      let data: PostRow[] | null = null;
+      try {
+        const res = await supabase
+          .from('posts')
+          .select(
+            'id, author_id, university_name, category, content, image_url, status, likes_count, created_at, student_profiles(full_name, avatar_url)',
+          )
+          .eq('status', 'published')
+          .order('created_at', { ascending: false })
+          .limit(100);
+        if (res.error) throw new Error(res.error.message);
+        data = res.data as unknown as PostRow[];
+      } catch {
+        // Table missing / not seeded — show bundled demo posts.
+        return DEMO_POSTS;
+      }
+      if (!data || data.length === 0) return DEMO_POSTS;
 
       // Which of these has the current user liked?
       let likedIds = new Set<string>();
-      if (myProfileId && data?.length) {
+      if (myProfileId && data.length) {
         const { data: likes } = await supabase
           .from('post_likes')
           .select('post_id')
@@ -52,7 +62,7 @@ export function usePosts(myProfileId?: string) {
         likedIds = new Set((likes ?? []).map((l) => l.post_id));
       }
 
-      return (data as unknown as PostRow[]).map((p) => {
+      return data.map((p) => {
         const author = firstRelation(p.student_profiles);
         return {
         id: p.id,

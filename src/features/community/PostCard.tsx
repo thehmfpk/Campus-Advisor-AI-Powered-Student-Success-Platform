@@ -16,7 +16,8 @@ import { moderatePost } from '@/lib/moderation';
 import type { Post } from '@/types/db';
 
 export function PostCard({ post, myProfileId }: { post: Post; myProfileId?: string }) {
-  const isOwner = post.author_id === myProfileId;
+  const isDemo = post.id.startsWith('demo-');
+  const isOwner = !isDemo && post.author_id === myProfileId;
   const toggleLike = useToggleLike(myProfileId);
   const reportPost = useReportPost(myProfileId);
   const deletePost = useDeletePost();
@@ -47,6 +48,11 @@ export function PostCard({ post, myProfileId }: { post: Post; myProfileId?: stri
   };
 
   const handleReport = async () => {
+    if (isDemo) {
+      toast.info('This is a sample post.');
+      setMenuOpen(false);
+      return;
+    }
     try {
       await reportPost.mutateAsync({ postId: post.id, reason: 'Reported by user' });
       toast.success('Reported. Our admins will review it.');
@@ -57,6 +63,10 @@ export function PostCard({ post, myProfileId }: { post: Post; myProfileId?: stri
   };
 
   const submitComment = async () => {
+    if (isDemo) {
+      toast.info('This is a sample post. Create your own post to start a discussion.');
+      return;
+    }
     const check = moderatePost(commentText);
     if (!check.ok) {
       toast.error(check.reason);
@@ -150,7 +160,13 @@ export function PostCard({ post, myProfileId }: { post: Post; myProfileId?: stri
 
         <div className="mt-4 flex items-center gap-4 text-sm text-muted">
           <button
-            onClick={() => toggleLike.mutate({ postId: post.id, liked: Boolean(post.liked_by_me) })}
+            onClick={() => {
+              if (isDemo) {
+                toast.info('This is a sample post. Create your own post to interact.');
+                return;
+              }
+              toggleLike.mutate({ postId: post.id, liked: Boolean(post.liked_by_me) });
+            }}
             className="flex items-center gap-1.5 transition hover:text-brand"
           >
             <Heart
