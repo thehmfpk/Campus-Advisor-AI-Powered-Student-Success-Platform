@@ -338,7 +338,11 @@ function ModerationSection() {
         ) : (
           <div className="space-y-3">
             {reports.map((r: Record<string, unknown>) => {
-              const post = r.posts as { content?: string; status?: string } | null;
+              const rawPost = r.posts as
+                | { content?: string; status?: string }
+                | { content?: string; status?: string }[]
+                | null;
+              const post = Array.isArray(rawPost) ? (rawPost[0] ?? null) : rawPost;
               return (
                 <div key={r.id as string} className="rounded-xl border border-border p-3">
                   <div className="flex items-center justify-between">

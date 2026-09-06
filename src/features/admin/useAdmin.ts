@@ -23,6 +23,7 @@ export function useAdminAnalytics() {
     enabled: Boolean(supabase),
     queryFn: async () => {
       if (!supabase) return null;
+      const db = supabase;
       const tables = [
         'student_profiles',
         'universities',
@@ -35,7 +36,7 @@ export function useAdminAnalytics() {
       ] as const;
       const entries = await Promise.all(
         tables.map(async (t) => {
-          const { count } = await supabase.from(t).select('*', { count: 'exact', head: true });
+          const { count } = await db.from(t).select('*', { count: 'exact', head: true });
           return [t, count ?? 0] as const;
         }),
       );

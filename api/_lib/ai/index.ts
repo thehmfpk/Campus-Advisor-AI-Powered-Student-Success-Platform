@@ -3,7 +3,7 @@ import type { AIProvider, CompleteInput, CompleteResult } from './types';
 import { MockAIProvider } from './mockProvider';
 import { FreeAIProvider } from './freeProvider';
 
-export * from './types';
+export type { AIProvider, CompleteInput, CompleteResult, ChatMessage } from './types';
 export { buildSystemPrompt, buildContextBlock } from './prompts';
 export type { Agent, AiContext } from './prompts';
 

@@ -12,7 +12,18 @@ interface PostRow {
   status: string;
   likes_count: number;
   created_at: string;
-  student_profiles?: { full_name: string; avatar_url: string | null } | null;
+  // PostgREST returns embedded relations as an array or object depending on
+  // the relationship; accept both and normalize when mapping.
+  student_profiles?:
+    | { full_name: string; avatar_url: string | null }
+    | { full_name: string; avatar_url: string | null }[]
+    | null;
+}
+
+/** Normalize a PostgREST embedded relation (array or object) to a single row. */
+function firstRelation<T>(rel: T | T[] | null | undefined): T | null {
+  if (!rel) return null;
+  return Array.isArray(rel) ? (rel[0] ?? null) : rel;
 }
 
 export function usePosts(myProfileId?: string) {
@@ -41,11 +52,13 @@ export function usePosts(myProfileId?: string) {
         likedIds = new Set((likes ?? []).map((l) => l.post_id));
       }
 
-      return (data as PostRow[]).map((p) => ({
+      return (data as unknown as PostRow[]).map((p) => {
+        const author = firstRelation(p.student_profiles);
+        return {
         id: p.id,
         author_id: p.author_id,
-        author_name: p.student_profiles?.full_name ?? 'Student',
-        author_avatar: p.student_profiles?.avatar_url ?? null,
+        author_name: author?.full_name ?? 'Student',
+        author_avatar: author?.avatar_url ?? null,
         university_id: null,
         university_name: p.university_name,
         category: p.category,
@@ -56,7 +69,8 @@ export function usePosts(myProfileId?: string) {
         comments_count: 0,
         liked_by_me: likedIds.has(p.id),
         created_at: p.created_at,
-      }));
+        };
+      });
     },
   });
 }
@@ -154,7 +168,8 @@ export function useComments(postId: string | null) {
         post_id: c.post_id as string,
         author_id: c.author_id as string,
         author_name:
-          (c.student_profiles as { full_name?: string } | null)?.full_name ?? 'Student',
+          firstRelation(c.student_profiles as { full_name?: string } | { full_name?: string }[] | null)
+            ?.full_name ?? 'Student',
         content: c.content as string,
         status: c.status as Comment['status'],
         created_at: c.created_at as string,
