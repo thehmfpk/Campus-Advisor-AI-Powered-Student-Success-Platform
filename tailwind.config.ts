@@ -15,6 +15,7 @@ export default {
           DEFAULT: 'hsl(var(--brand) / <alpha-value>)',
           soft: 'hsl(var(--brand-soft) / <alpha-value>)',
           fg: 'hsl(var(--brand-fg) / <alpha-value>)',
+          2: 'hsl(var(--brand-2) / <alpha-value>)',
         },
         accent: {
           DEFAULT: 'hsl(var(--accent) / <alpha-value>)',
