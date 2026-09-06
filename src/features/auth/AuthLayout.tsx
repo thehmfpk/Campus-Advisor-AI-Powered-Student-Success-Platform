@@ -1,4 +1,4 @@
-import { GraduationCap } from 'lucide-react';
+import { GraduationCap, Bot, Briefcase, Trophy } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -17,34 +17,64 @@ export function AuthLayout({
 }) {
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
-      {/* Brand panel */}
-      <div className="relative hidden flex-col justify-between bg-brand p-10 text-brand-fg lg:flex">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white/15">
-            <GraduationCap className="h-5 w-5" />
+      {/* Brand panel — logo + short designed blurb */}
+      <div className="relative hidden overflow-hidden bg-brand-gradient p-12 text-white lg:flex lg:flex-col lg:justify-between">
+        {/* decorative glows */}
+        <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
+
+        {/* Logo */}
+        <Link to="/" className="relative flex items-center gap-2.5">
+          <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-white/15 backdrop-blur">
+            <GraduationCap className="h-6 w-6" />
           </span>
-          <span className="text-lg font-semibold">Campus Advisor</span>
+          <span className="text-xl font-bold tracking-tight">Campus Advisor</span>
         </Link>
-        <div>
-          <h2 className="text-3xl font-bold leading-tight">
-            Your AI-Powered Campus Companion.
+
+        {/* Short designed blurb */}
+        <div className="relative">
+          <h2 className="text-4xl font-extrabold leading-[1.15]">
+            Your AI-Powered
+            <br />
+            Campus Companion.
           </h2>
-          <p className="mt-4 max-w-sm text-white/80">
-            Study smarter, build your career, discover opportunities, and connect with your
-            university community — all in one place.
+          <p className="mt-5 max-w-sm text-lg text-white/85">
+            Study smarter. Build your career. Discover opportunities.
           </p>
+
+          <ul className="mt-8 space-y-3 text-sm text-white/90">
+            <li className="flex items-center gap-3">
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/15">
+                <Bot className="h-4 w-4" />
+              </span>
+              Specialized AI advisors for study & career
+            </li>
+            <li className="flex items-center gap-3">
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/15">
+                <Briefcase className="h-4 w-4" />
+              </span>
+              Jobs matched to your skills
+            </li>
+            <li className="flex items-center gap-3">
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-white/15">
+                <Trophy className="h-4 w-4" />
+              </span>
+              University rankings & community
+            </li>
+          </ul>
         </div>
-        <p className="text-xs text-white/60">100% free-tier • No credit card required</p>
+
+        <p className="relative text-xs text-white/60">100% free · No credit card required</p>
       </div>
 
       {/* Form panel */}
       <div className="flex flex-col bg-bg">
         <div className="flex items-center justify-between p-6">
           <Link to="/" className="flex items-center gap-2 lg:hidden">
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-brand text-brand-fg">
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-brand-gradient text-white">
               <GraduationCap className="h-4 w-4" />
             </span>
-            <span className="font-semibold text-fg">Campus Advisor</span>
+            <span className="font-bold text-fg">Campus Advisor</span>
           </Link>
           <div className="ml-auto">
             <ThemeToggle />
@@ -58,8 +88,8 @@ export function AuthLayout({
 
             {!isSupabaseConfigured && (
               <div className="mt-4 rounded-xl border border-warning/40 bg-warning/10 p-3 text-xs text-fg">
-                Supabase is not configured yet. Add <code>VITE_SUPABASE_URL</code> and{' '}
-                <code>VITE_SUPABASE_ANON_KEY</code> to enable authentication.
+                Sign-in is not configured yet. Add <code>VITE_SUPABASE_URL</code> and{' '}
+                <code>VITE_SUPABASE_ANON_KEY</code> in your environment to enable accounts.
               </div>
             )}
 

@@ -96,3 +96,34 @@ export function useDeleteSubject(profileId?: string) {
     onSuccess: () => qc.invalidateQueries({ queryKey: profileKeys.subjects(profileId) }),
   });
 }
+
+
+/**
+ * Upload an avatar image to Supabase Storage (bucket "avatars") and return its
+ * public URL. Falls back gracefully: if the bucket/storage is unavailable, the
+ * caller can instead store a pasted image URL. Free-tier friendly.
+ */
+export function useUploadAvatar() {
+  const qc = useQueryClient();
+  const { user } = useAuth();
+  return useMutation({
+    mutationFn: async (file: File): Promise<string> => {
+      if (!supabase || !user) throw new Error('Not configured');
+      const ext = file.name.split('.').pop() ?? 'png';
+      const path = `${user.id}/avatar-${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage
+        .from('avatars')
+        .upload(path, file, { upsert: true, cacheControl: '3600' });
+      if (upErr) {
+        throw new Error(
+          'Avatar upload needs an "avatars" storage bucket. You can paste an image URL instead.',
+        );
+      }
+      const { data } = supabase.storage.from('avatars').getPublicUrl(path);
+      const url = data.publicUrl;
+      await supabase.from('student_profiles').update({ avatar_url: url }).eq('user_id', user.id);
+      return url;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: profileKeys.profile(user?.id) }),
+  });
+}

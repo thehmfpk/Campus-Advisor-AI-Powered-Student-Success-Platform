@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { Plus, Trash2, GraduationCap, Save } from 'lucide-react';
+import { Plus, Trash2, GraduationCap, Save, Camera } from 'lucide-react';
 import { PageHeader } from '@/components/PageHeader';
 import {
   Avatar,
@@ -24,6 +24,7 @@ import {
   useUpdateProfile,
   useAddSubject,
   useDeleteSubject,
+  useUploadAvatar,
 } from './useProfile';
 
 const MAX_SUBJECTS = 7;
@@ -82,6 +83,7 @@ export default function ProfilePage() {
   const updateProfile = useUpdateProfile();
   const addSubject = useAddSubject(profile?.id);
   const deleteSubject = useDeleteSubject(profile?.id);
+  const uploadAvatar = useUploadAvatar();
 
   const [form, setForm] = useState({
     full_name: '',
@@ -129,6 +131,30 @@ export default function ProfilePage() {
       />
     );
   }
+
+  const onAvatarFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error('Please choose an image under 2 MB.');
+      return;
+    }
+    try {
+      await uploadAvatar.mutateAsync(file);
+      toast.success('Profile photo updated.');
+    } catch (err) {
+      // Storage bucket may not exist — offer the URL fallback.
+      const url = window.prompt(
+        'Photo upload is unavailable. Paste an image URL to use as your avatar:',
+      );
+      if (url) {
+        await updateProfile.mutateAsync({ avatar_url: url });
+        toast.success('Profile photo updated.');
+      } else if (err instanceof Error) {
+        toast.error(err.message);
+      }
+    }
+  };
 
   const save = async () => {
     try {
@@ -203,6 +229,13 @@ export default function ProfilePage() {
             <CardBody className="flex flex-col items-center text-center">
               <div className="relative">
                 <Avatar name={form.full_name || 'Student'} src={profile.avatar_url} size={88} />
+                <label
+                  className="absolute -bottom-1 -left-1 inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 border-surface bg-surface-2 text-fg transition hover:bg-brand hover:text-white"
+                  title="Change photo"
+                >
+                  <Camera className="h-4 w-4" />
+                  <input type="file" accept="image/*" className="hidden" onChange={onAvatarFile} />
+                </label>
                 <span className="absolute -bottom-1 -right-1 inline-flex h-7 w-7 items-center justify-center rounded-full border-2 border-surface bg-brand-gradient text-[10px] font-bold text-white">
                   {completion.percent}%
                 </span>
