@@ -80,7 +80,7 @@ export default function LandingPage() {
 
       {/* Hero */}
       <section className="relative overflow-hidden bg-hero-mesh">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-20 lg:grid-cols-2 lg:py-28">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 pb-16 pt-10 lg:grid-cols-2 lg:pb-20 lg:pt-14">
           <div className="animate-fade-in">
             <span className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand-soft px-3 py-1 text-xs font-semibold text-brand">
               <Sparkles className="h-3.5 w-3.5" /> AI-powered • 100% free • Student-first
