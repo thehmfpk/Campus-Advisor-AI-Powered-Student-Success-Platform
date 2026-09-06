@@ -33,6 +33,7 @@ export function useAdminAnalytics() {
         'university_feedback',
         'portal_feedback',
         'feature_requests',
+        'societies',
       ] as const;
       const entries = await Promise.all(
         tables.map(async (t) => {

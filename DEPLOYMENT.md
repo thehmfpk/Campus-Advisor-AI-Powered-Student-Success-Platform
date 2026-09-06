@@ -7,6 +7,10 @@ This guide deploys Campus Advisor on **Vercel Free** + **Supabase Free** with **
 2. In **SQL Editor**, run the migrations in order:
    - `supabase/migrations/0001_schema.sql`
    - `supabase/migrations/0002_rls.sql`
+   - `supabase/migrations/0003_societies.sql`  ← societies & clubs (run this too)
+
+   > If you already ran 0001 & 0002 earlier, just run **0003** now, then re-run
+   > the seed (below) so societies and the expanded rankings appear.
 3. In **Project Settings → API**, copy:
    - Project URL → `VITE_SUPABASE_URL`
    - `anon` public key → `VITE_SUPABASE_ANON_KEY`

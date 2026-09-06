@@ -181,7 +181,45 @@ async function seedDemoStudent() {
           category: 'event',
           content: 'Our university is hosting a hackathon next month. Team up!',
         },
+        {
+          author_id: profile.id,
+          university_id: univ?.id ?? null,
+          university_name: 'FAST-NUCES',
+          category: 'scholarship',
+          content:
+            'Reminder: HEC need-based scholarship portal is open this semester. Check eligibility and apply early!',
+        },
+        {
+          author_id: profile.id,
+          university_id: univ?.id ?? null,
+          university_name: 'FAST-NUCES',
+          category: 'achievement',
+          content:
+            'Our team reached the finals of the national programming contest 🎉 Proud moment for the CS department!',
+        },
+        {
+          author_id: profile.id,
+          university_id: univ?.id ?? null,
+          university_name: 'FAST-NUCES',
+          category: 'internship',
+          content:
+            'Systems Limited is hiring frontend interns — great opportunity if you know React. Apply via LinkedIn.',
+        },
       ]);
+    }
+
+    // Enroll the demo student into a couple of societies for a lively demo.
+    const { data: soc } = await db
+      .from('societies')
+      .select('id, slug')
+      .in('slug', ['gdgoc', 'github-campus', 'cp-club']);
+    for (const s of soc ?? []) {
+      await db
+        .from('society_memberships')
+        .upsert(
+          { society_id: s.id, profile_id: profile.id },
+          { onConflict: 'society_id,profile_id', ignoreDuplicates: true },
+        );
     }
   }
 }

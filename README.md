@@ -91,7 +91,7 @@ supabase/migrations/  # SQL migrations (added in Phase 3)
 - **AI CV Builder** — ATS-friendly template, live preview, AI review, browser print-to-PDF.
 - **GPA / CGPA calculator** — accurate HEC 4.0 math with transparent breakdown.
 - **Coding notes** — read-only study notes by technology.
-- **University community** — posts, likes, comments, reports, moderation.
+- **University community** — posts, likes, comments, reports, moderation, plus **societies & clubs** (GDGoC, AWS, GitHub, IEEE, ACM…) you can join.
 - **Feedback** — private university feedback, platform feedback, feature requests.
 - **University rankings** — verified data with cited source + year.
 - **Admin dashboard** — analytics, student/university/job/ranking management, community moderation, feedback & feature-request review.
@@ -111,3 +111,12 @@ Implemented phase-by-phase per [`.kiro/specs/tasks.md`](.kiro/specs/tasks.md).
 > **Note:** This build environment has no outbound network access, so
 > `npm install`, Supabase provisioning, live AI calls, and Vercel deploy run in
 > **your** environment. The codebase is written install- and deploy-ready.
+
+### Updating an existing deployment
+
+If you deployed an earlier version, to get **societies** and the **expanded
+rankings**:
+1. In Supabase → SQL Editor, run `supabase/migrations/0003_societies.sql`.
+2. Locally, run `npm run seed` again (idempotent — it seeds societies and
+   reseeds rankings when the table is small).
+3. Vercel auto-rebuilds on each push to `main`.

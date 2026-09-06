@@ -57,6 +57,7 @@ const ANALYTIC_LABELS: Record<string, { label: string; icon: typeof Users }> = {
   university_feedback: { label: 'University feedback', icon: Flag },
   portal_feedback: { label: 'Platform feedback', icon: MessageSquareWarning },
   feature_requests: { label: 'Feature requests', icon: Lightbulb },
+  societies: { label: 'Societies', icon: Users },
 };
 
 function AnalyticsSection() {
