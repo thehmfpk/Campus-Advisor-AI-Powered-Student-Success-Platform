@@ -195,7 +195,7 @@ async function seedDemoStudent() {
           university_name: 'FAST-NUCES',
           category: 'achievement',
           content:
-            'Our team reached the finals of the national programming contest 🎉 Proud moment for the CS department!',
+            'Our team reached the finals of the national programming contest. Proud moment for the CS department!',
         },
         {
           author_id: profile.id,

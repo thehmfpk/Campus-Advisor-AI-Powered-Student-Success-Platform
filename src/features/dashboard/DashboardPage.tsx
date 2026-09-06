@@ -131,7 +131,7 @@ export default function DashboardPage() {
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-2xl font-extrabold sm:text-3xl">
-              {greeting()}, {firstName} 👋
+              {greeting()}, {firstName}
             </h1>
             <p className="mt-1 text-white/85">Here&apos;s your academic and career overview.</p>
           </div>
@@ -190,7 +190,7 @@ export default function DashboardPage() {
               <ProgressRing value={completion.percent} />
               <div className="flex-1">
                 <p className="text-sm font-medium text-fg">
-                  {completion.percent === 100 ? 'All set! 🎉' : `${completion.done}/${completion.total} complete`}
+                  {completion.percent === 100 ? 'All set!' : `${completion.done}/${completion.total} complete`}
                 </p>
                 <p className="text-xs text-muted">Finish the remaining items below.</p>
               </div>

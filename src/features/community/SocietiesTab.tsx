@@ -20,7 +20,7 @@ function SocietyCard({ society, profileId }: { society: Society; profileId?: str
   const onToggle = async () => {
     try {
       await toggle.mutateAsync({ societyId: society.id, joined: society.joined });
-      toast.success(society.joined ? `Left ${society.name}` : `Joined ${society.name}! 🎉`);
+      toast.success(society.joined ? `Left ${society.name}` : `Joined ${society.name}`);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : 'Action failed.');
     }

@@ -79,16 +79,17 @@ export function routeIntent(message: string): RouteResult {
   return { agent: best, scores };
 }
 
+/** Icon key maps to a Lucide icon chosen in the UI layer (no emojis). */
 export const AGENT_META: Record<
   ResolvableAgent,
-  { label: string; blurb: string; emoji: string }
+  { label: string; blurb: string; icon: 'book' | 'rocket' | 'code' | 'file' }
 > = {
   academic: {
     label: 'Academic Advisor',
     blurb: 'Study plans, exams, semester planning',
-    emoji: '📚',
+    icon: 'book',
   },
-  career: { label: 'Career Advisor', blurb: 'Careers, skills, interviews', emoji: '🚀' },
-  coding: { label: 'Coding Mentor', blurb: 'Programming & CS concepts', emoji: '💻' },
-  cv: { label: 'CV Advisor', blurb: 'Resume review & improvement', emoji: '📄' },
+  career: { label: 'Career Advisor', blurb: 'Careers, skills, interviews', icon: 'rocket' },
+  coding: { label: 'Coding Mentor', blurb: 'Programming & CS concepts', icon: 'code' },
+  cv: { label: 'CV Advisor', blurb: 'Resume review & improvement', icon: 'file' },
 };

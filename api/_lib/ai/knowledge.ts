@@ -60,7 +60,7 @@ Share your weekly commitments and I'll draft a realistic timetable.`,
 4. **Draft ugly, edit smart** — get a rough version done, then improve it.
 5. **Buffer** — aim to finish 1 day early for review.
 
-⚠️ Always confirm the exact deadline and requirements with your instructor or LMS — I can't verify those.`,
+Always confirm the exact deadline and requirements with your instructor or LMS — I can't verify those.`,
   },
   {
     role: 'academic',

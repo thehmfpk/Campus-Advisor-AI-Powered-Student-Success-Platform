@@ -1,5 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
-import { Bot, Send, Sparkles, Wand2 } from 'lucide-react';
+import {
+  Bot,
+  Send,
+  Sparkles,
+  Wand2,
+  BookOpen,
+  Rocket,
+  Code2,
+  FileText,
+  type LucideIcon,
+} from 'lucide-react';
 import { PageHeader } from '@/components/PageHeader';
 import { Badge, Button, Card, CardBody } from '@/components/ui';
 import { Avatar } from '@/components/ui';
@@ -10,12 +20,19 @@ import { useAdvisor } from './useAdvisor';
 import { ChatMarkdown } from './ChatMarkdown';
 import { useAuth } from '@/features/auth/AuthContext';
 
-const AGENT_OPTIONS: { key: AgentKey; label: string; emoji: string }[] = [
-  { key: 'auto', label: 'Auto (smart routing)', emoji: '✨' },
-  { key: 'academic', label: AGENT_META.academic.label, emoji: AGENT_META.academic.emoji },
-  { key: 'career', label: AGENT_META.career.label, emoji: AGENT_META.career.emoji },
-  { key: 'coding', label: AGENT_META.coding.label, emoji: AGENT_META.coding.emoji },
-  { key: 'cv', label: AGENT_META.cv.label, emoji: AGENT_META.cv.emoji },
+const AGENT_ICON: Record<ResolvableAgent, LucideIcon> = {
+  academic: BookOpen,
+  career: Rocket,
+  coding: Code2,
+  cv: FileText,
+};
+
+const AGENT_OPTIONS: { key: AgentKey; label: string; icon: LucideIcon }[] = [
+  { key: 'auto', label: 'Auto (smart routing)', icon: Sparkles },
+  { key: 'academic', label: AGENT_META.academic.label, icon: BookOpen },
+  { key: 'career', label: AGENT_META.career.label, icon: Rocket },
+  { key: 'coding', label: AGENT_META.coding.label, icon: Code2 },
+  { key: 'cv', label: AGENT_META.cv.label, icon: FileText },
 ];
 
 const STARTERS = [
@@ -27,9 +44,10 @@ const STARTERS = [
 
 function AgentBadge({ agent }: { agent: ResolvableAgent }) {
   const meta = AGENT_META[agent];
+  const Icon = AGENT_ICON[agent];
   return (
     <Badge tone="brand">
-      <span>{meta.emoji}</span> {meta.label}
+      <Icon className="h-3 w-3" /> {meta.label}
     </Badge>
   );
 }
@@ -75,7 +93,7 @@ export default function AdvisorPage() {
                 : 'border-border bg-surface text-muted hover:text-fg',
             )}
           >
-            <span>{o.emoji}</span> {o.label}
+            <o.icon className="h-4 w-4" /> {o.label}
           </button>
         ))}
       </div>
