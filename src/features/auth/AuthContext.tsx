@@ -42,27 +42,71 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+/** Create the users + student_profiles rows for a user (idempotent upserts). */
+async function ensureUserRecords(
+  userId: string,
+  email: string,
+  fields: {
+    full_name: string;
+    roll_number?: string;
+    university_name?: string;
+    department_name?: string;
+    semester?: number;
+  },
+): Promise<void> {
+  if (!supabase) return;
+  try {
+    await supabase.from('users').upsert({ id: userId, email, role: 'student' }, { onConflict: 'id' });
+    await supabase.from('student_profiles').upsert(
+      {
+        user_id: userId,
+        full_name: fields.full_name,
+        roll_number: fields.roll_number ?? null,
+        university_name: fields.university_name ?? null,
+        department_name: fields.department_name ?? null,
+        semester: fields.semester ?? null,
+      },
+      { onConflict: 'user_id' },
+    );
+  } catch {
+    /* non-fatal — the profile page can still create/update later */
+  }
+}
+
 /** Map a Supabase session + profile row into our AuthUser. */
 async function loadAuthUser(session: Session | null): Promise<AuthUser | null> {
   if (!session?.user || !supabase) return null;
   const meta = session.user.user_metadata ?? {};
-  // Role and full name are stored on the user row; fall back to metadata.
   let role: Role = (meta.role as Role) ?? 'student';
   let fullName = (meta.full_name as string) ?? session.user.email ?? 'Student';
 
-  const { data } = await supabase
+  const { data: userRow } = await supabase
     .from('users')
     .select('role')
     .eq('id', session.user.id)
     .maybeSingle();
-  if (data?.role) role = data.role as Role;
+  if (userRow?.role) role = userRow.role as Role;
 
   const { data: profile } = await supabase
     .from('student_profiles')
     .select('full_name')
     .eq('user_id', session.user.id)
     .maybeSingle();
-  if (profile?.full_name) fullName = profile.full_name;
+
+  // If the profile row does not exist yet (e.g. created via email confirmation
+  // where the signup-time insert had no session), create it now from the
+  // registration metadata so the profile is always connected to the account.
+  if (!profile) {
+    await ensureUserRecords(session.user.id, session.user.email ?? '', {
+      full_name: fullName,
+      roll_number: meta.roll_number as string | undefined,
+      university_name: meta.university_name as string | undefined,
+      department_name: meta.department_name as string | undefined,
+      semester: meta.semester as number | undefined,
+    });
+  } else if (profile.full_name) {
+    fullName = profile.full_name;
+  }
 
   return { id: session.user.id, email: session.user.email ?? '', role, fullName };
 }
@@ -103,27 +147,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email: input.email,
       password: input.password,
       options: {
-        data: { full_name: input.fullName, role: 'student' },
-      },
-    });
-    if (error) throw new Error(mapAuthError(error.message));
-    // Create the profile row (RLS allows the owner to insert their own profile).
-    if (data.user) {
-      await supabase.from('student_profiles').upsert(
-        {
-          user_id: data.user.id,
+        // Stash all registration fields in metadata so the profile can be
+        // created reliably even if the immediate insert is blocked by RLS
+        // (e.g. when email confirmation is enabled and there is no session yet).
+        data: {
           full_name: input.fullName,
+          role: 'student',
           roll_number: input.rollNumber,
           university_name: input.university,
           department_name: input.department,
           semester: input.semester,
         },
-        { onConflict: 'user_id' },
-      );
-      await supabase.from('users').upsert(
-        { id: data.user.id, email: input.email, role: 'student' },
-        { onConflict: 'id' },
-      );
+      },
+    });
+    if (error) throw new Error(mapAuthError(error.message));
+    // Best-effort immediate creation (works when a session is returned).
+    if (data.user && data.session) {
+      await ensureUserRecords(data.user.id, input.email, {
+        full_name: input.fullName,
+        roll_number: input.rollNumber,
+        university_name: input.university,
+        department_name: input.department,
+        semester: input.semester,
+      });
     }
   }, []);
 
