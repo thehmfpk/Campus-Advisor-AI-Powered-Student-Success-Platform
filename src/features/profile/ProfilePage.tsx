@@ -17,6 +17,7 @@ import {
   Textarea,
 } from '@/components/ui';
 import { HEC_4_0 } from '@/lib/grades';
+import { profileCompletion } from './completion';
 import {
   useProfile,
   useSubjects,
@@ -169,6 +170,21 @@ export default function ProfilePage() {
     }
   };
 
+  // Live completion reflects the current form state (before saving).
+  const completion = profileCompletion(
+    {
+      ...profile,
+      full_name: form.full_name,
+      university_name: form.university_name,
+      department_name: form.department_name,
+      semester: form.semester,
+      skills: form.skills,
+      career_interests: form.career_interests,
+      bio: form.bio,
+    },
+    subjects.length,
+  );
+
   return (
     <div>
       <PageHeader
@@ -182,18 +198,48 @@ export default function ProfilePage() {
       />
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <Card className="lg:col-span-1">
-          <CardBody className="flex flex-col items-center text-center">
-            <Avatar name={form.full_name || 'Student'} src={profile.avatar_url} size={88} />
-            <h2 className="mt-3 text-lg font-semibold text-fg">{form.full_name || 'Student'}</h2>
-            <p className="text-sm text-muted">{form.roll_number}</p>
-            <div className="mt-3 flex flex-wrap justify-center gap-2">
-              <Badge tone="brand">{form.university_name || 'University'}</Badge>
-              <Badge tone="accent">Semester {form.semester}</Badge>
-            </div>
-            <p className="mt-4 text-sm text-muted">{form.department_name}</p>
-          </CardBody>
-        </Card>
+        <div className="space-y-6 lg:col-span-1">
+          <Card>
+            <CardBody className="flex flex-col items-center text-center">
+              <div className="relative">
+                <Avatar name={form.full_name || 'Student'} src={profile.avatar_url} size={88} />
+                <span className="absolute -bottom-1 -right-1 inline-flex h-7 w-7 items-center justify-center rounded-full border-2 border-surface bg-brand-gradient text-[10px] font-bold text-white">
+                  {completion.percent}%
+                </span>
+              </div>
+              <h2 className="mt-3 text-lg font-semibold text-fg">{form.full_name || 'Student'}</h2>
+              <p className="text-sm text-muted">{form.roll_number}</p>
+              <div className="mt-3 flex flex-wrap justify-center gap-2">
+                <Badge tone="brand">{form.university_name || 'University'}</Badge>
+                <Badge tone="accent">Semester {form.semester}</Badge>
+              </div>
+              <p className="mt-4 text-sm text-muted">{form.department_name}</p>
+              {form.bio && <p className="mt-2 text-xs text-muted">{form.bio}</p>}
+            </CardBody>
+          </Card>
+
+          <Card>
+            <CardHeader title="Profile completion" subtitle={`${completion.done}/${completion.total} done`} />
+            <CardBody>
+              <div className="h-2 w-full overflow-hidden rounded-full bg-surface-2">
+                <div
+                  className="h-full rounded-full bg-brand-gradient transition-all"
+                  style={{ width: `${completion.percent}%` }}
+                />
+              </div>
+              <ul className="mt-4 space-y-2">
+                {completion.items.map((it) => (
+                  <li key={it.label} className="flex items-center gap-2 text-sm">
+                    <span className={`inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[10px] ${it.done ? 'bg-accent text-white' : 'border border-border text-transparent'}`}>
+                      ✓
+                    </span>
+                    <span className={it.done ? 'text-muted line-through' : 'text-fg'}>{it.label}</span>
+                  </li>
+                ))}
+              </ul>
+            </CardBody>
+          </Card>
+        </div>
 
         <Card className="lg:col-span-2">
           <CardHeader title="Academic information" />
