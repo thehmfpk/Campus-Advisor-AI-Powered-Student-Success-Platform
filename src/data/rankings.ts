@@ -73,11 +73,23 @@ const INTERNATIONAL: SeedRanking[] = [
   ['University of Toronto', 'Canada', 21],
   ['University of Melbourne', 'Australia', 13],
   ['Tsinghua University', 'China', 20],
+  ['Peking University', 'China', 14],
   ['University of Tokyo', 'Japan', 32],
+  ['University of California, Berkeley (UCB)', 'United States', 12],
+  ['University of Chicago', 'United States', 11],
+  ['University of Michigan', 'United States', 44],
+  ['University of Edinburgh', 'United Kingdom', 27],
+  ['EPFL', 'Switzerland', 26],
+  ['Technical University of Munich', 'Germany', 28],
+  ['Seoul National University', 'South Korea', 31],
+  ['University of Sydney', 'Australia', 18],
+  ['McGill University', 'Canada', 29],
   ['National University of Sciences & Technology (NUST)', 'Pakistan', 371],
   ['Quaid-i-Azam University', 'Pakistan', 401],
   ['University of the Punjab', 'Pakistan', 651],
   ['LUMS (Lahore University of Management Sciences)', 'Pakistan', 691],
+  ['University of Agriculture, Faisalabad', 'Pakistan', 801],
+  ['COMSATS University Islamabad', 'Pakistan', 851],
 ].map(([name, country, position]) => ({
   university_name: name as string,
   country: country as string,
@@ -104,4 +116,22 @@ const ASIA: SeedRanking[] = [
   category: 'Asia',
 }));
 
-export const SEED_RANKINGS: SeedRanking[] = [...PAKISTAN, ...INTERNATIONAL, ...ASIA];
+// Times Higher Education (THE) World rankings — illustrative top entries; verify.
+const THE: SeedRanking[] = [
+  ['University of Oxford', 'United Kingdom', 1],
+  ['Stanford University', 'United States', 2],
+  ['Massachusetts Institute of Technology (MIT)', 'United States', 3],
+  ['Harvard University', 'United States', 4],
+  ['University of Cambridge', 'United Kingdom', 5],
+  ['National University of Sciences & Technology (NUST)', 'Pakistan', 401],
+  ['Quaid-i-Azam University', 'Pakistan', 401],
+].map(([name, country, position]) => ({
+  university_name: name as string,
+  country: country as string,
+  position: position as number,
+  source: 'Times Higher Education (THE) World University Rankings',
+  year: 2025,
+  category: 'World',
+}));
+
+export const SEED_RANKINGS: SeedRanking[] = [...PAKISTAN, ...INTERNATIONAL, ...ASIA, ...THE];

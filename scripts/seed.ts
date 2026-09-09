@@ -57,8 +57,8 @@ async function seedUniversities() {
 async function seedRankings() {
   console.log('→ Seeding ranking records…');
   const { count } = await db.from('ranking_records').select('*', { count: 'exact', head: true });
-  // Reseed if empty or if the table only has the old small dataset (< 20 rows).
-  if ((count ?? 0) < 20) {
+  // Reseed if empty or if the table only has an older/smaller dataset (< 50 rows).
+  if ((count ?? 0) < 50) {
     await db.from('ranking_records').delete().neq('id', '00000000-0000-0000-0000-000000000000');
     await db.from('ranking_records').insert(SEED_RANKINGS);
   }
