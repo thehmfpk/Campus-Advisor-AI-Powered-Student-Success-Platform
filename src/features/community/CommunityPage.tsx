@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { Users, Search, Send } from 'lucide-react';
+import { Users, Search, Send, ImagePlus } from 'lucide-react';
 import { PageHeader } from '@/components/PageHeader';
 import {
   Avatar,
@@ -29,6 +29,8 @@ function FeedTab() {
 
   const [content, setContent] = useState('');
   const [category, setCategory] = useState<PostCategory>('general');
+  const [mediaUrl, setMediaUrl] = useState('');
+  const [showMedia, setShowMedia] = useState(false);
   const [query, setQuery] = useState('');
   const [filterCat, setFilterCat] = useState<'all' | PostCategory>('all');
 
@@ -52,9 +54,15 @@ function FeedTab() {
       return;
     }
     try {
-      await createPost.mutateAsync({ category, content: content.trim() });
+      await createPost.mutateAsync({
+        category,
+        content: content.trim(),
+        image_url: mediaUrl.trim() || null,
+      });
       setContent('');
       setCategory('general');
+      setMediaUrl('');
+      setShowMedia(false);
       toast.success('Posted to the community!');
     } catch (e) {
       toast.error(e instanceof Error ? e.message : 'Could not post.');
@@ -76,18 +84,35 @@ function FeedTab() {
                 rows={3}
                 className="w-full resize-none rounded-xl border border-border bg-surface p-3 text-sm text-fg"
               />
+              {showMedia && (
+                <Input
+                  placeholder="Paste an image or video URL (e.g. https://…/photo.jpg or a .mp4 / YouTube link)"
+                  value={mediaUrl}
+                  onChange={(e) => setMediaUrl(e.target.value)}
+                />
+              )}
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <Select
-                  className="w-48"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value as PostCategory)}
-                >
-                  {POST_CATEGORIES.map((c) => (
-                    <option key={c.value} value={c.value}>
-                      {c.label}
-                    </option>
-                  ))}
-                </Select>
+                <div className="flex items-center gap-2">
+                  <Select
+                    className="w-44"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value as PostCategory)}
+                  >
+                    {POST_CATEGORIES.map((c) => (
+                      <option key={c.value} value={c.value}>
+                        {c.label}
+                      </option>
+                    ))}
+                  </Select>
+                  <button
+                    type="button"
+                    onClick={() => setShowMedia((v) => !v)}
+                    className={`inline-flex h-9 items-center gap-1.5 rounded-xl border px-3 text-sm transition ${showMedia ? 'border-brand bg-brand-soft text-brand' : 'border-border text-muted hover:text-fg'}`}
+                    title="Add photo or video"
+                  >
+                    <ImagePlus className="h-4 w-4" /> Media
+                  </button>
+                </div>
                 <Button onClick={submit} loading={createPost.isPending} disabled={!content.trim()}>
                   <Send className="h-4 w-4" /> Post
                 </Button>

@@ -88,13 +88,14 @@ export function usePosts(myProfileId?: string) {
 export function useCreatePost(profileId?: string, universityName?: string | null) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (input: { category: PostCategory; content: string }) => {
+    mutationFn: async (input: { category: PostCategory; content: string; image_url?: string | null }) => {
       if (!supabase || !profileId) throw new Error('Not configured');
       const { error } = await supabase.from('posts').insert({
         author_id: profileId,
         university_name: universityName ?? null,
         category: input.category,
         content: input.content,
+        image_url: input.image_url ?? null,
       });
       if (error) throw new Error(error.message);
     },
@@ -196,6 +197,18 @@ export function useAddComment(profileId?: string) {
       const { error } = await supabase
         .from('comments')
         .insert({ post_id: postId, author_id: profileId, content });
+      if (error) throw new Error(error.message);
+    },
+    onSuccess: (_d, v) => qc.invalidateQueries({ queryKey: ['comments', v.postId] }),
+  });
+}
+
+export function useDeleteComment() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id }: { id: string; postId: string }) => {
+      if (!supabase) throw new Error('Not configured');
+      const { error } = await supabase.from('comments').delete().eq('id', id);
       if (error) throw new Error(error.message);
     },
     onSuccess: (_d, v) => qc.invalidateQueries({ queryKey: ['comments', v.postId] }),

@@ -7,11 +7,45 @@ import { categoryLabel, timeAgo } from './categories';
 import {
   useAddComment,
   useComments,
+  useDeleteComment,
   useDeletePost,
   useReportPost,
   useToggleLike,
   useUpdatePost,
 } from './useCommunity';
+
+/** Renders an image or video from a URL (image files, .mp4/.webm, or YouTube). */
+function PostMedia({ url }: { url: string }) {
+  const lower = url.toLowerCase();
+  const isVideoFile = /\.(mp4|webm|ogg)(\?|$)/.test(lower);
+  const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
+  if (yt) {
+    return (
+      <div className="mt-3 aspect-video overflow-hidden rounded-xl border border-border">
+        <iframe
+          className="h-full w-full"
+          src={`https://www.youtube.com/embed/${yt[1]}`}
+          title="Post video"
+          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      </div>
+    );
+  }
+  if (isVideoFile) {
+    return (
+      <video src={url} controls className="mt-3 max-h-96 w-full rounded-xl border border-border" />
+    );
+  }
+  return (
+    <img
+      src={url}
+      alt="Post attachment"
+      loading="lazy"
+      className="mt-3 max-h-96 w-full rounded-xl border border-border object-cover"
+    />
+  );
+}
 import { moderatePost } from '@/lib/moderation';
 import type { Post } from '@/types/db';
 
@@ -23,6 +57,7 @@ export function PostCard({ post, myProfileId }: { post: Post; myProfileId?: stri
   const deletePost = useDeletePost();
   const updatePost = useUpdatePost();
   const addComment = useAddComment(myProfileId);
+  const deleteComment = useDeleteComment();
 
   const [showComments, setShowComments] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -158,6 +193,8 @@ export function PostCard({ post, myProfileId }: { post: Post; myProfileId?: stri
           <p className="mt-3 whitespace-pre-line text-sm text-fg">{post.content}</p>
         )}
 
+        {post.image_url && <PostMedia url={post.image_url} />}
+
         <div className="mt-4 flex items-center gap-4 text-sm text-muted">
           <button
             onClick={() => {
@@ -185,12 +222,22 @@ export function PostCard({ post, myProfileId }: { post: Post; myProfileId?: stri
         {showComments && (
           <div className="mt-4 space-y-3 border-t border-border pt-3">
             {comments.map((c) => (
-              <div key={c.id} className="flex gap-2">
+              <div key={c.id} className="group flex items-start gap-2">
                 <Avatar name={c.author_name} size={28} />
                 <div className="rounded-xl bg-surface-2 px-3 py-2">
                   <p className="text-xs font-medium text-fg">{c.author_name}</p>
                   <p className="text-sm text-fg">{c.content}</p>
                 </div>
+                {c.author_id === myProfileId && (
+                  <button
+                    onClick={() => deleteComment.mutate({ id: c.id, postId: post.id })}
+                    className="mt-1 text-muted opacity-0 transition hover:text-danger group-hover:opacity-100"
+                    aria-label="Delete comment"
+                    title="Delete your comment"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                )}
               </div>
             ))}
             <div className="flex items-end gap-2">

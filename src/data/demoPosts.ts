@@ -12,6 +12,7 @@ interface DemoPost {
   content: string;
   likes_count: number;
   hoursAgo: number;
+  image_url?: string;
 }
 
 const RAW: DemoPost[] = [
@@ -59,6 +60,7 @@ const RAW: DemoPost[] = [
       'Our team reached the national finals of the ICPC regional contest. Months of daily problem solving on Codeforces really paid off. Consistency beats intensity.',
     likes_count: 91,
     hoursAgo: 48,
+    image_url: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=900&q=70',
   },
   {
     author_name: 'Usman Tariq',
@@ -98,7 +100,7 @@ export const DEMO_POSTS: Post[] = RAW.map((p, i) => ({
   university_name: p.university_name,
   category: p.category,
   content: p.content,
-  image_url: null,
+  image_url: p.image_url ?? null,
   status: 'published',
   likes_count: p.likes_count,
   comments_count: 0,
