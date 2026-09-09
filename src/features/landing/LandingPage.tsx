@@ -19,7 +19,6 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { useAuth } from '@/features/auth/AuthContext';
 
 const FEATURES = [
@@ -43,9 +42,20 @@ const STEPS = [
 
 const STATS = [
   { value: '4', label: 'AI advisor agents' },
-  { value: '10+', label: 'Coding topics' },
+  { value: '14', label: 'Coding topics' },
   { value: '50+', label: 'University rankings' },
   { value: '100%', label: 'Free to use' },
+];
+
+const MARQUEE = [
+  'AI Academic Advisor',
+  'Career Roadmaps',
+  'Coding Mentor',
+  'ATS CV Builder',
+  'AI Job Matching',
+  'GPA / CGPA',
+  'Societies & Clubs',
+  'University Rankings',
 ];
 
 export default function LandingPage() {
@@ -64,9 +74,8 @@ export default function LandingPage() {
             <span className="text-lg font-bold text-fg">Campus Advisor</span>
           </div>
           <div className="flex items-center gap-2">
-            <a href="#features" className="hidden px-3 text-sm font-medium text-muted hover:text-fg sm:block">Features</a>
-            <a href="#how" className="hidden px-3 text-sm font-medium text-muted hover:text-fg sm:block">How it works</a>
-            <LanguageSwitcher />
+            <a href="#features" className="hidden px-3 text-sm font-medium text-muted transition hover:text-fg sm:block">Features</a>
+            <a href="#how" className="hidden px-3 text-sm font-medium text-muted transition hover:text-fg sm:block">How it works</a>
             <ThemeToggle />
             {user ? (
               <Link to={primaryHref}><Button size="sm">Go to app</Button></Link>
@@ -82,19 +91,26 @@ export default function LandingPage() {
 
       {/* Hero */}
       <section className="relative overflow-hidden bg-hero-mesh">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 pb-16 pt-10 lg:grid-cols-2 lg:pb-20 lg:pt-14">
-          <div className="animate-fade-in">
-            <span className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand-soft px-3 py-1 text-xs font-semibold text-brand">
+        {/* animated ambient glows */}
+        <div className="animate-soft-pulse pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-brand/20 blur-3xl" />
+        <div className="animate-soft-pulse pointer-events-none absolute -right-24 top-40 h-80 w-80 rounded-full bg-brand-2/20 blur-3xl" style={{ animationDelay: '2s' }} />
+
+        <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-6 pb-16 pt-12 lg:grid-cols-2 lg:pb-20 lg:pt-16">
+          <div>
+            <span className="animate-rise inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand-soft px-3 py-1 text-xs font-semibold text-brand">
               <Sparkles className="h-3.5 w-3.5" /> AI powered, 100% free, student first
             </span>
-            <h1 className="mt-5 text-4xl font-extrabold leading-[1.1] tracking-tight text-fg sm:text-5xl lg:text-6xl">
-              Your AI-Powered <span className="text-gradient">Campus Companion</span>
+            <h1 className="animate-rise mt-5 text-4xl font-extrabold leading-[1.08] tracking-tight text-fg sm:text-5xl lg:text-6xl" style={{ animationDelay: '80ms' }}>
+              Your AI-Powered{' '}
+              <span className="animate-gradient bg-gradient-to-r from-brand via-brand-2 to-brand bg-clip-text text-transparent">
+                Campus Companion
+              </span>
             </h1>
-            <p className="mt-5 max-w-xl text-lg text-muted">
+            <p className="animate-rise mt-5 max-w-xl text-lg text-muted" style={{ animationDelay: '160ms' }}>
               Study smarter. Build your career. Discover opportunities. Connect with your
-              university community — all in one intelligent platform.
+              university community, all in one intelligent platform.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="animate-rise mt-8 flex flex-col gap-3 sm:flex-row" style={{ animationDelay: '240ms' }}>
               <Link to={primaryHref}>
                 <Button size="lg" className="w-full shadow-lg shadow-brand/30 sm:w-auto">
                   Get Started Free <ArrowRight className="h-4 w-4" />
@@ -104,16 +120,16 @@ export default function LandingPage() {
                 <Button size="lg" variant="secondary" className="w-full sm:w-auto">Explore Features</Button>
               </a>
             </div>
-            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted">
+            <div className="animate-rise mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted" style={{ animationDelay: '320ms' }}>
               <span className="inline-flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-accent" /> No credit card</span>
-              <span className="inline-flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-accent" /> Works offline (mock AI)</span>
-              <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-accent" /> Private & secure</span>
+              <span className="inline-flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-accent" /> Works offline</span>
+              <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-accent" /> Private and secure</span>
             </div>
           </div>
 
           {/* Hero visual: floating preview cards */}
           <div className="relative hidden lg:block">
-            <div className="relative mx-auto max-w-md">
+            <div className="animate-rise relative mx-auto max-w-md" style={{ animationDelay: '200ms' }}>
               <div className="rounded-3xl border border-border bg-surface p-5 shadow-2xl glow-brand">
                 <div className="flex items-center gap-3 border-b border-border pb-3">
                   <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-gradient text-white"><Bot className="h-4 w-4" /></span>
@@ -123,11 +139,11 @@ export default function LandingPage() {
                   </div>
                 </div>
                 <div className="mt-3 space-y-2.5">
-                  <div className="ml-auto max-w-[80%] rounded-2xl bg-brand px-3 py-2 text-xs text-brand-fg">
-                    I have exams in 2 weeks and I'm weak in Data Structures.
+                  <div className="ml-auto max-w-[80%] rounded-2xl rounded-tr-sm bg-brand-gradient px-3 py-2 text-xs text-white">
+                    I have exams in 2 weeks and I&apos;m weak in Data Structures.
                   </div>
-                  <div className="max-w-[85%] rounded-2xl bg-surface-2 px-3 py-2 text-xs text-fg">
-                    Here's a focused plan: prioritize DS (60% of time), use active recall, and attempt one past paper daily. Want a day-by-day schedule?
+                  <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-surface-2 px-3 py-2 text-xs text-fg">
+                    Here&apos;s a focused plan: prioritize DS (60% of time), use active recall, and attempt one past paper daily. Want a day-by-day schedule?
                   </div>
                 </div>
               </div>
@@ -140,18 +156,29 @@ export default function LandingPage() {
               </div>
               <div className="animate-float absolute -bottom-6 -left-6 w-40 rounded-2xl border border-border bg-surface p-3 shadow-xl" style={{ animationDelay: '1.5s' }}>
                 <span className="text-xs text-muted">CGPA</span>
-                <p className="text-xl font-bold text-gradient">3.62</p>
+                <p className="text-xl font-bold text-brand">3.62</p>
               </div>
             </div>
           </div>
         </div>
 
+        {/* Scrolling marquee strip */}
+        <div className="relative border-y border-border/60 bg-surface/50 py-3">
+          <div className="flex w-max animate-marquee gap-8 whitespace-nowrap">
+            {[...MARQUEE, ...MARQUEE].map((item, i) => (
+              <span key={i} className="inline-flex items-center gap-2 text-sm font-medium text-muted">
+                <Sparkles className="h-3.5 w-3.5 text-brand" /> {item}
+              </span>
+            ))}
+          </div>
+        </div>
+
         {/* Stats bar */}
-        <div className="mx-auto max-w-6xl px-6 pb-12">
+        <div className="mx-auto max-w-6xl px-6 py-12">
           <div className="grid grid-cols-2 gap-4 rounded-2xl border border-border bg-surface/70 p-6 backdrop-blur sm:grid-cols-4">
-            {STATS.map((s) => (
-              <div key={s.label} className="text-center">
-                <p className="text-2xl font-extrabold text-gradient sm:text-3xl">{s.value}</p>
+            {STATS.map((s, i) => (
+              <div key={s.label} className="animate-rise text-center" style={{ animationDelay: `${i * 80}ms` }}>
+                <p className="bg-gradient-to-r from-brand to-brand-2 bg-clip-text text-2xl font-extrabold text-transparent sm:text-3xl">{s.value}</p>
                 <p className="mt-1 text-xs text-muted">{s.label}</p>
               </div>
             ))}
@@ -164,12 +191,16 @@ export default function LandingPage() {
         <div className="mx-auto mb-12 max-w-2xl text-center">
           <span className="text-sm font-semibold uppercase tracking-wider text-brand">Everything in one place</span>
           <h2 className="mt-2 text-3xl font-extrabold text-fg sm:text-4xl">Built for your entire journey</h2>
-          <p className="mt-3 text-muted">From your first semester to your first job — one intelligent platform.</p>
+          <p className="mt-3 text-muted">From your first semester to your first job, one intelligent platform.</p>
         </div>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {FEATURES.map((f) => (
-            <div key={f.title} className="card-hover rounded-2xl border border-border bg-surface p-5 shadow-card">
-              <span className={`inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${f.color} text-white shadow-lg`}>
+          {FEATURES.map((f, i) => (
+            <div
+              key={f.title}
+              className="animate-rise card-hover rounded-2xl border border-border bg-surface p-5 shadow-card"
+              style={{ animationDelay: `${i * 60}ms` }}
+            >
+              <span className={`inline-flex h-12 w-12 items-center justify-center rounded-xl ${f.color} text-white shadow-lg`}>
                 <f.icon className="h-6 w-6" />
               </span>
               <h3 className="mt-4 font-bold text-fg">{f.title}</h3>
@@ -189,7 +220,7 @@ export default function LandingPage() {
           </div>
           <div className="grid gap-5 md:grid-cols-5">
             {STEPS.map((s, i) => (
-              <div key={s.title} className="relative rounded-2xl border border-border bg-bg p-5">
+              <div key={s.title} className="animate-rise relative rounded-2xl border border-border bg-bg p-5" style={{ animationDelay: `${i * 80}ms` }}>
                 <span className="absolute -top-3 left-5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-brand-gradient text-xs font-bold text-white shadow">
                   {i + 1}
                 </span>
@@ -210,18 +241,18 @@ export default function LandingPage() {
           ))}
         </div>
         <p className="text-2xl font-medium leading-relaxed text-fg sm:text-3xl">
-          &ldquo;Campus Advisor doesn&apos;t just store my information — it{' '}
-          <span className="text-gradient">understands me</span> and helps me make better academic and
-          career decisions.&rdquo;
+          &ldquo;Campus Advisor doesn&apos;t just store my information, it{' '}
+          <span className="bg-gradient-to-r from-brand to-brand-2 bg-clip-text text-transparent">understands me</span>{' '}
+          and helps me make better academic and career decisions.&rdquo;
         </p>
-        <p className="mt-4 text-sm text-muted">— Every student who uses it</p>
+        <p className="mt-4 text-sm text-muted">Every student who uses it</p>
       </section>
 
       {/* Final CTA */}
       <section className="mx-auto max-w-5xl px-6 pb-24">
         <div className="relative overflow-hidden rounded-3xl bg-brand-gradient p-10 text-center text-white shadow-2xl sm:p-16">
-          <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-white/10 blur-2xl" />
-          <div className="pointer-events-none absolute -bottom-16 -left-16 h-56 w-56 rounded-full bg-white/10 blur-2xl" />
+          <div className="animate-soft-pulse pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-white/10 blur-2xl" />
+          <div className="animate-soft-pulse pointer-events-none absolute -bottom-16 -left-16 h-56 w-56 rounded-full bg-white/10 blur-2xl" style={{ animationDelay: '2s' }} />
           <h2 className="relative text-3xl font-extrabold sm:text-4xl">Your university journey deserves an advisor.</h2>
           <p className="relative mx-auto mt-3 max-w-xl text-white/90">
             Join Campus Advisor today and turn your goals into a clear, actionable plan.
@@ -242,7 +273,6 @@ export default function LandingPage() {
           </div>
           <p>Your AI-Powered Campus Companion.</p>
           <p className="text-xs">Built free tier first. No credit card required. Made with Kiro.</p>
-          {/* Discreet admin entry — low-visibility, for staff only */}
           <Link to="/admin/login" className="mt-2 text-[11px] text-muted/50 transition hover:text-brand">
             Admin
           </Link>

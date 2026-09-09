@@ -5,7 +5,6 @@ import { toast } from 'sonner';
 import { studentNav } from './nav';
 import { useAuth } from '@/features/auth/AuthContext';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { useI18n } from '@/i18n/LanguageProvider';
 import { Avatar } from '@/components/ui';
 import { cn } from '@/lib/cn';
@@ -98,10 +97,7 @@ export function AppLayout() {
           <Menu className="h-5 w-5" />
         </button>
         <span className="font-semibold text-fg">{t('app.name', 'Campus Advisor')}</span>
-        <div className="flex items-center gap-2">
-          <LanguageSwitcher />
-          <ThemeToggle />
-        </div>
+        <ThemeToggle />
       </header>
 
       {/* Mobile drawer */}
@@ -138,7 +134,6 @@ export function AppLayout() {
       <div className="lg:pl-64">
         {/* Desktop top bar */}
         <div className="hidden items-center justify-end gap-3 border-b border-border bg-surface/60 px-6 py-3 backdrop-blur lg:flex">
-          <LanguageSwitcher />
           <ThemeToggle />
         </div>
         <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:py-8">

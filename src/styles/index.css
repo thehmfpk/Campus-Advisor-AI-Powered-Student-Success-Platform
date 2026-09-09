@@ -153,6 +153,75 @@ body {
   animation: float 5s ease-in-out infinite;
 }
 
+/* Animated gradient shift for the hero headline / accents */
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 6s ease infinite;
+}
+
+/* Rise-in on load, staggerable via inline animation-delay */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-rise {
+  animation: rise-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Slow pulse for ambient glows */
+@keyframes soft-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.08);
+  }
+}
+.animate-soft-pulse {
+  animation: soft-pulse 7s ease-in-out infinite;
+}
+
+/* Continuous horizontal marquee (respects reduced motion below) */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 22s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-gradient,
+  .animate-rise,
+  .animate-soft-pulse,
+  .animate-marquee {
+    animation: none !important;
+  }
+}
+
 /* Custom scrollbar for a polished feel */
 ::-webkit-scrollbar {
   width: 10px;
