@@ -129,6 +129,10 @@ export interface CodingNoteSection {
   examples: string;
   best_practices: string;
   interview_tips: string;
+  /** Optional extended sections for longer, deeper notes. */
+  deep_dive?: string;
+  common_mistakes?: string;
+  practice?: string;
 }
 
 export interface CodingNote {

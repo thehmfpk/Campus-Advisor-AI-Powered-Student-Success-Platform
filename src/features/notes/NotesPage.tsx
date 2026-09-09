@@ -11,12 +11,15 @@ const SECTION_ORDER: { key: keyof CodingNoteSection; label: string }[] = [
   { key: 'fundamentals', label: 'Fundamentals' },
   { key: 'syntax', label: 'Syntax' },
   { key: 'concepts', label: 'Key concepts' },
+  { key: 'deep_dive', label: 'Deep dive' },
   { key: 'examples', label: 'Examples' },
+  { key: 'practice', label: 'Practice & exercises' },
+  { key: 'common_mistakes', label: 'Common mistakes' },
   { key: 'best_practices', label: 'Best practices' },
   { key: 'interview_tips', label: 'Interview tips' },
 ];
 
-const CODE_SECTIONS = new Set<keyof CodingNoteSection>(['syntax', 'examples']);
+const CODE_SECTIONS = new Set<keyof CodingNoteSection>(['syntax', 'examples', 'practice']);
 
 function NoteReader({ note }: { note: CodingNote }) {
   return (
