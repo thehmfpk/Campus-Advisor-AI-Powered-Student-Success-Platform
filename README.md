@@ -112,11 +112,16 @@ Implemented phase-by-phase per [`.kiro/specs/tasks.md`](.kiro/specs/tasks.md).
 > `npm install`, Supabase provisioning, live AI calls, and Vercel deploy run in
 > **your** environment. The codebase is written install- and deploy-ready.
 
-### Updating an existing deployment
+### Setup & updating
 
-If you deployed an earlier version, to get **societies** and the **expanded
-rankings**:
-1. In Supabase → SQL Editor, run `supabase/migrations/0003_societies.sql`.
-2. Locally, run `npm run seed` again (idempotent — it seeds societies and
-   reseeds rankings when the table is small).
-3. Vercel auto-rebuilds on each push to `main`.
+Full one-time Supabase steps (migrations, storage buckets, admin, env vars) are
+in **[SUPABASE_SETUP.md](SUPABASE_SETUP.md)**. Highlights:
+
+- The app works out of the box with **bundled demo data** and a fully working
+  in-browser **AI chatbot** (55+ Q&A) — no setup required to explore.
+- To enable accounts/saving/admin/media: run migrations `0001`–`0003`, create
+  public storage buckets `avatars` and `post-media`, and sign in with an
+  `ADMIN_EMAILS` address for admin access.
+- **Multi-language:** English, Urdu, Arabic (RTL), and Chinese via the language
+  switcher.
+- Push to `main` → **Vercel auto-rebuilds and redeploys**.
