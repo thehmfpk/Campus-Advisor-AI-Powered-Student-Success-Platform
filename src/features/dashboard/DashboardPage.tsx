@@ -31,12 +31,12 @@ function greeting(t: (k: string, f?: string) => string): string {
 }
 
 const QUICK_ACTIONS = [
-  { to: '/app/advisor', key: 'nav.advisor', label: 'Ask AI Advisor', icon: Bot, color: 'from-blue-500 to-indigo-500' },
-  { to: '/app/gpa', key: 'nav.gpa', label: 'Calculate GPA', icon: Calculator, color: 'from-rose-500 to-pink-500' },
-  { to: '/app/cv', key: 'nav.cv', label: 'Build CV', icon: FileText, color: 'from-emerald-500 to-teal-500' },
-  { to: '/app/jobs', key: 'nav.jobs', label: 'Find Jobs', icon: Briefcase, color: 'from-amber-500 to-orange-500' },
-  { to: '/app/notes', key: 'nav.notes', label: 'Coding Notes', icon: BookOpen, color: 'from-cyan-500 to-sky-500' },
-  { to: '/app/community', key: 'nav.community', label: 'Community', icon: Users, color: 'from-fuchsia-500 to-purple-500' },
+  { to: '/app/advisor', key: 'nav.advisor', label: 'Ask AI Advisor', icon: Bot, color: 'tile-1' },
+  { to: '/app/gpa', key: 'nav.gpa', label: 'Calculate GPA', icon: Calculator, color: 'tile-2' },
+  { to: '/app/cv', key: 'nav.cv', label: 'Build CV', icon: FileText, color: 'tile-3' },
+  { to: '/app/jobs', key: 'nav.jobs', label: 'Find Jobs', icon: Briefcase, color: 'tile-4' },
+  { to: '/app/notes', key: 'nav.notes', label: 'Coding Notes', icon: BookOpen, color: 'tile-5' },
+  { to: '/app/community', key: 'nav.community', label: 'Community', icon: Users, color: 'tile-6' },
 ];
 
 function StatCard({
@@ -185,10 +185,10 @@ export default function DashboardPage() {
 
       {/* Stat cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label={t('dash.currentSemester')} value={`${profile?.semester ?? 'N/A'}`} icon={BookMarked} accent="from-blue-500 to-indigo-500" />
-        <StatCard label={t('dash.subjects')} value={`${subjects.length}`} hint={`${subjects.length}/7`} icon={BookOpen} accent="from-cyan-500 to-sky-500" />
-        <StatCard label={t('dash.estimatedGpa')} value={gpa ? gpa.toFixed(2) : 'N/A'} icon={TrendingUp} accent="from-emerald-500 to-teal-500" />
-        <StatCard label={t('dash.skillsTracked')} value={`${profile?.skills?.length ?? 0}`} icon={Target} accent="from-fuchsia-500 to-purple-500" />
+        <StatCard label={t('dash.currentSemester')} value={`${profile?.semester ?? 'N/A'}`} icon={BookMarked} accent="tile-1" />
+        <StatCard label={t('dash.subjects')} value={`${subjects.length}`} hint={`${subjects.length}/7`} icon={BookOpen} accent="tile-3" />
+        <StatCard label={t('dash.estimatedGpa')} value={gpa ? gpa.toFixed(2) : 'N/A'} icon={TrendingUp} accent="tile-2" />
+        <StatCard label={t('dash.skillsTracked')} value={`${profile?.skills?.length ?? 0}`} icon={Target} accent="tile-5" />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">

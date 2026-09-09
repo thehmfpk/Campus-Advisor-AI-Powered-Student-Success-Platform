@@ -23,14 +23,14 @@ import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { useAuth } from '@/features/auth/AuthContext';
 
 const FEATURES = [
-  { icon: Bot, title: 'AI Academic Advisor', desc: 'Study plans, exam prep, and semester planning tailored to your subjects.', color: 'from-blue-500 to-indigo-500' },
-  { icon: Rocket, title: 'AI Career Advisor', desc: 'Personalized roadmaps, skills, and interview preparation.', color: 'from-violet-500 to-purple-500' },
-  { icon: BookOpen, title: 'Coding Mentor', desc: 'Clear explanations and examples across languages and CS concepts.', color: 'from-cyan-500 to-sky-500' },
-  { icon: FileText, title: 'AI CV Builder', desc: 'Build an ATS-friendly CV and get AI suggestions to improve it.', color: 'from-emerald-500 to-teal-500' },
-  { icon: Briefcase, title: 'Jobs & Internships', desc: 'Discover roles with explainable AI match scores and real apply links.', color: 'from-amber-500 to-orange-500' },
-  { icon: Calculator, title: 'GPA / CGPA Calculator', desc: 'Accurate, transparent calculations on the HEC 4.0 scale.', color: 'from-rose-500 to-pink-500' },
-  { icon: Users, title: 'Communities & Societies', desc: 'Join GDGoC, AWS, GitHub campus clubs and connect across universities.', color: 'from-fuchsia-500 to-pink-500' },
-  { icon: Trophy, title: 'University Rankings', desc: 'Verified rankings with clearly cited source and year.', color: 'from-yellow-500 to-amber-500' },
+  { icon: Bot, title: 'AI Academic Advisor', desc: 'Study plans, exam prep, and semester planning tailored to your subjects.', color: 'tile-1' },
+  { icon: Rocket, title: 'AI Career Advisor', desc: 'Personalized roadmaps, skills, and interview preparation.', color: 'tile-2' },
+  { icon: BookOpen, title: 'Coding Mentor', desc: 'Clear explanations and examples across languages and CS concepts.', color: 'tile-3' },
+  { icon: FileText, title: 'AI CV Builder', desc: 'Build an ATS-friendly CV and get AI suggestions to improve it.', color: 'tile-4' },
+  { icon: Briefcase, title: 'Jobs & Internships', desc: 'Discover roles with explainable AI match scores and real apply links.', color: 'tile-5' },
+  { icon: Calculator, title: 'GPA / CGPA Calculator', desc: 'Accurate, transparent calculations on the HEC 4.0 scale.', color: 'tile-6' },
+  { icon: Users, title: 'Communities & Societies', desc: 'Join GDGoC, AWS, GitHub campus clubs and connect across universities.', color: 'tile-1' },
+  { icon: Trophy, title: 'University Rankings', desc: 'Verified rankings with clearly cited source and year.', color: 'tile-2' },
 ];
 
 const STEPS = [

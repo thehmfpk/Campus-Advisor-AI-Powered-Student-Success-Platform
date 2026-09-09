@@ -19,7 +19,7 @@ export function CvTemplate({ cv, avatarUrl }: { cv: CvData; avatarUrl?: string |
       style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
     >
       {/* accent bar */}
-      <div className="mb-4 h-1.5 w-full rounded-full" style={{ background: 'linear-gradient(90deg,#3b52d6,#7c6cf0)' }} />
+      <div className="mb-4 h-1.5 w-full rounded-full" style={{ background: 'linear-gradient(90deg,#1D546D,#5F9598)' }} />
 
       <header className="flex items-start justify-between gap-4 border-b-2 border-neutral-800 pb-3">
         <div>

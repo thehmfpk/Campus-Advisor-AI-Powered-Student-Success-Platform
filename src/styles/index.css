@@ -6,51 +6,58 @@
  * Design tokens (spec §19). HSL channel values so Tailwind can apply
  * <alpha-value>. Palette: blue / light-blue / green / black / white.
  */
+/*
+ * Palette (user-provided):
+ *   #061E29 deep teal-black  -> hsl(197 74% 9%)
+ *   #1D546D dark teal-blue   -> hsl(199 58% 27%)   (brand)
+ *   #5F9598 muted teal       -> hsl(183 22% 49%)   (accent / brand-2)
+ *   #F3F4F4 off-white        -> hsl(180 5% 96%)    (light bg)
+ */
 :root,
 [data-theme='light'] {
-  --brand: 231 70% 55%; /* royal blue */
-  --brand-2: 245 65% 62%; /* indigo / violet-blue */
-  --brand-soft: 231 60% 95%;
-  --brand-fg: 0 0% 100%;
-  --accent: 245 65% 62%; /* indigo accent (cohesive, not green) */
-  --accent-fg: 0 0% 100%;
+  --brand: 199 58% 27%; /* #1D546D */
+  --brand-2: 183 22% 49%; /* #5F9598 */
+  --brand-soft: 190 30% 92%;
+  --brand-fg: 180 5% 98%;
+  --accent: 183 22% 49%; /* #5F9598 */
+  --accent-fg: 197 74% 9%;
 
-  --bg: 222 30% 97%;
-  --bg-deep: 231 45% 12%;
+  --bg: 180 5% 96%; /* #F3F4F4 */
+  --bg-deep: 197 74% 9%; /* #061E29 */
   --surface: 0 0% 100%;
-  --surface-2: 226 30% 95%;
-  --border: 226 24% 88%;
-  --fg: 226 40% 14%;
-  --muted: 224 14% 46%;
+  --surface-2: 190 16% 93%;
+  --border: 195 15% 85%;
+  --fg: 197 74% 12%;
+  --muted: 197 15% 38%;
 
-  --success: 158 60% 42%;
-  --danger: 0 72% 51%;
-  --warning: 38 92% 50%;
+  --success: 168 55% 33%;
+  --danger: 0 66% 47%;
+  --warning: 34 85% 45%;
 
-  --ring: 231 70% 55%;
+  --ring: 199 58% 27%;
 }
 
 [data-theme='dark'] {
-  --brand: 224 80% 66%; /* bright royal blue */
-  --brand-2: 250 75% 70%; /* indigo */
-  --brand-soft: 230 40% 20%;
-  --brand-fg: 230 47% 8%;
-  --accent: 250 75% 70%;
-  --accent-fg: 230 47% 8%;
+  --brand: 187 30% 55%; /* lighter teal for contrast on dark */
+  --brand-2: 195 45% 40%;
+  --brand-soft: 197 45% 18%;
+  --brand-fg: 197 74% 8%;
+  --accent: 183 30% 60%;
+  --accent-fg: 197 74% 8%;
 
-  --bg: 230 42% 8%; /* deep navy */
-  --bg-deep: 232 48% 6%;
-  --surface: 230 34% 12%;
-  --surface-2: 230 28% 16%;
-  --border: 228 24% 24%;
-  --fg: 220 30% 96%;
-  --muted: 224 16% 66%;
+  --bg: 197 74% 9%; /* #061E29 */
+  --bg-deep: 197 78% 6%;
+  --surface: 198 55% 13%;
+  --surface-2: 198 42% 18%;
+  --border: 197 30% 24%;
+  --fg: 180 12% 94%;
+  --muted: 188 16% 68%;
 
-  --success: 158 55% 55%;
-  --danger: 0 72% 64%;
-  --warning: 38 92% 60%;
+  --success: 168 45% 52%;
+  --danger: 0 65% 62%;
+  --warning: 34 85% 60%;
 
-  --ring: 224 80% 66%;
+  --ring: 187 30% 55%;
 }
 
 * {
@@ -92,6 +99,15 @@ body {
 .bg-brand-gradient {
   background-image: linear-gradient(135deg, hsl(var(--brand)), hsl(var(--brand-2)));
 }
+
+/* Teal-family tint gradients used for feature/action tiles (cohesive palette).
+   Applied via `bg-gradient-to-br` + one of these overrides. */
+.tile-1 { background-image: linear-gradient(135deg, #1D546D, #5F9598); }
+.tile-2 { background-image: linear-gradient(135deg, #061E29, #1D546D); }
+.tile-3 { background-image: linear-gradient(135deg, #5F9598, #1D546D); }
+.tile-4 { background-image: linear-gradient(135deg, #1D546D, #061E29); }
+.tile-5 { background-image: linear-gradient(135deg, #2E6E82, #5F9598); }
+.tile-6 { background-image: linear-gradient(135deg, #5F9598, #2E6E82); }
 
 .bg-hero-mesh {
   background-color: hsl(var(--bg));
