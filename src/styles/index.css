@@ -8,47 +8,49 @@
  */
 :root,
 [data-theme='light'] {
-  --brand: 221 83% 53%; /* vivid blue */
-  --brand-2: 199 89% 48%; /* cyan / light blue */
-  --brand-soft: 214 100% 96%;
+  --brand: 231 70% 55%; /* royal blue */
+  --brand-2: 245 65% 62%; /* indigo / violet-blue */
+  --brand-soft: 231 60% 95%;
   --brand-fg: 0 0% 100%;
-  --accent: 158 64% 40%; /* emerald green */
+  --accent: 245 65% 62%; /* indigo accent (cohesive, not green) */
   --accent-fg: 0 0% 100%;
 
-  --bg: 210 40% 98%;
+  --bg: 222 30% 97%;
+  --bg-deep: 231 45% 12%;
   --surface: 0 0% 100%;
-  --surface-2: 214 32% 96%;
-  --border: 214 28% 89%;
-  --fg: 222 47% 11%;
-  --muted: 215 16% 47%;
+  --surface-2: 226 30% 95%;
+  --border: 226 24% 88%;
+  --fg: 226 40% 14%;
+  --muted: 224 14% 46%;
 
-  --success: 158 64% 40%;
+  --success: 158 60% 42%;
   --danger: 0 72% 51%;
   --warning: 38 92% 50%;
 
-  --ring: 221 83% 53%;
+  --ring: 231 70% 55%;
 }
 
 [data-theme='dark'] {
-  --brand: 213 94% 68%;
-  --brand-2: 190 90% 55%;
-  --brand-soft: 217 40% 18%;
-  --brand-fg: 222 47% 11%;
-  --accent: 158 64% 52%;
-  --accent-fg: 222 47% 11%;
+  --brand: 224 80% 66%; /* bright royal blue */
+  --brand-2: 250 75% 70%; /* indigo */
+  --brand-soft: 230 40% 20%;
+  --brand-fg: 230 47% 8%;
+  --accent: 250 75% 70%;
+  --accent-fg: 230 47% 8%;
 
-  --bg: 222 47% 7%;
-  --surface: 222 40% 10%;
-  --surface-2: 222 33% 14%;
-  --border: 217 24% 22%;
-  --fg: 210 40% 96%;
-  --muted: 215 20% 65%;
+  --bg: 230 42% 8%; /* deep navy */
+  --bg-deep: 232 48% 6%;
+  --surface: 230 34% 12%;
+  --surface-2: 230 28% 16%;
+  --border: 228 24% 24%;
+  --fg: 220 30% 96%;
+  --muted: 224 16% 66%;
 
-  --success: 158 64% 52%;
-  --danger: 0 72% 62%;
-  --warning: 38 92% 58%;
+  --success: 158 55% 55%;
+  --danger: 0 72% 64%;
+  --warning: 38 92% 60%;
 
-  --ring: 213 94% 68%;
+  --ring: 224 80% 66%;
 }
 
 * {

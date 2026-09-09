@@ -83,9 +83,9 @@ function AnalyticsSection() {
     { label: 'Societies', value: (data as Record<string, number>).societies ?? 0 },
   ];
   const donut = [
-    { label: 'University feedback', value: data.university_feedback ?? 0, color: '#2563eb' },
-    { label: 'Platform feedback', value: data.portal_feedback ?? 0, color: '#06b6d4' },
-    { label: 'Feature requests', value: data.feature_requests ?? 0, color: '#16a34a' },
+    { label: 'University feedback', value: data.university_feedback ?? 0, color: '#3b52d6' },
+    { label: 'Platform feedback', value: data.portal_feedback ?? 0, color: '#7c6cf0' },
+    { label: 'Feature requests', value: data.feature_requests ?? 0, color: '#22c1a6' },
   ];
 
   return (

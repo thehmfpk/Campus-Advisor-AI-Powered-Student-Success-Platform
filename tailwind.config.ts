@@ -22,6 +22,7 @@ export default {
           fg: 'hsl(var(--accent-fg) / <alpha-value>)',
         },
         bg: 'hsl(var(--bg) / <alpha-value>)',
+        'bg-deep': 'hsl(var(--bg-deep) / <alpha-value>)',
         surface: 'hsl(var(--surface) / <alpha-value>)',
         'surface-2': 'hsl(var(--surface-2) / <alpha-value>)',
         border: 'hsl(var(--border) / <alpha-value>)',

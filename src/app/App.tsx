@@ -25,6 +25,7 @@ const CommunityPage = lazy(() => import('@/features/community/CommunityPage'));
 const RankingsPage = lazy(() => import('@/features/rankings/RankingsPage'));
 const FeedbackPage = lazy(() => import('@/features/feedback/FeedbackPage'));
 const AdminPage = lazy(() => import('@/features/admin/AdminPage'));
+const AdminLoginPage = lazy(() => import('@/features/admin/AdminLoginPage'));
 const KitchenSinkPage = lazy(() => import('@/features/dev/KitchenSinkPage'));
 const NotFoundPage = lazy(() => import('@/features/misc/NotFoundPage'));
 
@@ -86,6 +87,7 @@ export function App() {
                   </Route>
 
                   {/* Admin */}
+                  <Route path="/admin/login" element={<AdminLoginPage />} />
                   <Route
                     path="/admin"
                     element={

@@ -12,11 +12,11 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
-/** Requires an admin. Non-admins are redirected to the student dashboard. */
+/** Requires an admin. Guests go to the admin login; non-admins to the dashboard. */
 export function RequireAdmin({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
   if (loading) return <PageLoader />;
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user) return <Navigate to="/admin/login" replace />;
   if (user.role !== 'admin') return <Navigate to="/app/dashboard" replace />;
   return <>{children}</>;
 }
