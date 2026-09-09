@@ -84,9 +84,19 @@ function JobCard({ job, profile }: { job: Job; profile: Parameters<typeof comput
         )}
 
         <div className="mt-4 flex items-center justify-between gap-2">
-          <span className="text-xs text-muted">
-            {job.posted_date ? `Posted ${job.posted_date}` : ''}
-          </span>
+          <div className="text-xs">
+            {job.posted_date && <p className="text-muted">Posted {job.posted_date}</p>}
+            {job.closes_date && (() => {
+              const days = Math.ceil((new Date(job.closes_date).getTime() - Date.now()) / 86400000);
+              const closed = days < 0;
+              const soon = !closed && days <= 7;
+              return (
+                <p className={closed ? 'font-medium text-danger' : soon ? 'font-medium text-warning' : 'text-muted'}>
+                  {closed ? `Closed ${job.closes_date}` : `Closes ${job.closes_date}${soon ? ` · ${days}d left` : ''}`}
+                </p>
+              );
+            })()}
+          </div>
           <div className="flex gap-2">
             <a href={googleUrl} target="_blank" rel="noreferrer" title="Search on Google Jobs">
               <Button size="sm" variant="ghost">Google</Button>

@@ -20,6 +20,7 @@ export interface SeedJob {
   apply_url: string; // primary: LinkedIn Jobs search
   google_url: string; // secondary: Google Jobs search
   posted_date: string;
+  closes_date: string; // application closing date
   source: string;
 }
 
@@ -48,6 +49,13 @@ interface RawJob {
   posted_date: string;
 }
 
+/** Closing date = posted date + N days (varies a little per role for realism). */
+function closingDate(posted: string, addDays: number): string {
+  const d = new Date(posted);
+  d.setDate(d.getDate() + addDays);
+  return d.toISOString().slice(0, 10);
+}
+
 const RAW_JOBS: RawJob[] = [
   { title: 'Frontend Developer Intern', company: 'Systems Limited', location: 'Lahore, Pakistan', is_remote: false, employment_type: 'internship', required_skills: ['HTML', 'CSS', 'JavaScript', 'React'], tags: ['frontend', 'web', 'computer science', 'software engineering'], experience_level: 'Entry / Student', posted_date: '2026-08-20' },
   { title: 'Junior Backend Engineer', company: 'Devsinc', location: 'Remote (Pakistan)', is_remote: true, employment_type: 'full_time', required_skills: ['Node.js', 'SQL', 'JavaScript', 'Git'], tags: ['backend', 'api', 'computer science', 'software engineering'], experience_level: '0-1 years', posted_date: '2026-08-25' },
@@ -67,9 +75,10 @@ const RAW_JOBS: RawJob[] = [
   { title: 'Business Analyst Intern', company: 'Abacus Consulting', location: 'Islamabad, Pakistan', is_remote: false, employment_type: 'internship', required_skills: ['Excel', 'SQL', 'Communication'], tags: ['business', 'analytics'], experience_level: 'Student', posted_date: '2026-08-16' },
 ];
 
-export const SEED_JOBS: SeedJob[] = RAW_JOBS.map((j) => ({
+export const SEED_JOBS: SeedJob[] = RAW_JOBS.map((j, i) => ({
   ...j,
   apply_url: linkedInSearchUrl(j.title, j.is_remote ? 'Pakistan' : j.location),
   google_url: googleJobsUrl(j.title, j.is_remote ? 'Pakistan' : j.location),
+  closes_date: closingDate(j.posted_date, 21 + (i % 4) * 7), // 21–42 days after posting
   source: 'Curated · apply via LinkedIn/Google Jobs',
 }));

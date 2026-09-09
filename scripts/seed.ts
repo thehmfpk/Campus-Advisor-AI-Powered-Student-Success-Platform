@@ -68,8 +68,8 @@ async function seedJobs() {
   console.log('→ Seeding jobs…');
   const { count } = await db.from('jobs').select('*', { count: 'exact', head: true });
   if ((count ?? 0) === 0) {
-    // Strip client-only fields (google_url is derived at render time, not a column).
-    const rows = SEED_JOBS.map(({ google_url: _g, ...rest }) => rest);
+    // Strip client-only fields not present as DB columns.
+    const rows = SEED_JOBS.map(({ google_url: _g, closes_date: _c, ...rest }) => rest);
     await db.from('jobs').insert(rows);
   }
 }

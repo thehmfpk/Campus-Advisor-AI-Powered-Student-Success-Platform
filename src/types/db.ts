@@ -103,6 +103,7 @@ export interface Job {
   apply_url: string | null;
   google_url?: string | null;
   posted_date: string | null;
+  closes_date?: string | null;
   source: string | null;
   created_at: string;
 }
