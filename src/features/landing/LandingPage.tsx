@@ -242,6 +242,10 @@ export default function LandingPage() {
           </div>
           <p>Your AI-Powered Campus Companion.</p>
           <p className="text-xs">Built free-tier-first · No credit card required · Made with Kiro.</p>
+          {/* Discreet admin entry — low-visibility, for staff only */}
+          <Link to="/admin" className="mt-2 text-[11px] text-muted/50 transition hover:text-brand">
+            Admin
+          </Link>
         </div>
       </footer>
     </div>

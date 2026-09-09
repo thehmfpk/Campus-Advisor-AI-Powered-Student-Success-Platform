@@ -32,6 +32,7 @@ import {
   Tabs,
 } from '@/components/ui';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { BarChart, DonutChart } from './Charts';
 import { useAuth } from '@/features/auth/AuthContext';
 import {
   useAdminAnalytics,
@@ -73,25 +74,56 @@ function AnalyticsSection() {
     );
   }
   if (!data) return <EmptyState title="No analytics" description="Configure Supabase to see metrics." />;
+
+  const barData = [
+    { label: 'Students', value: data.student_profiles ?? 0 },
+    { label: 'Posts', value: data.posts ?? 0 },
+    { label: 'Jobs', value: data.jobs ?? 0 },
+    { label: 'AI chats', value: data.ai_conversations ?? 0 },
+    { label: 'Societies', value: (data as Record<string, number>).societies ?? 0 },
+  ];
+  const donut = [
+    { label: 'University feedback', value: data.university_feedback ?? 0, color: '#2563eb' },
+    { label: 'Platform feedback', value: data.portal_feedback ?? 0, color: '#06b6d4' },
+    { label: 'Feature requests', value: data.feature_requests ?? 0, color: '#16a34a' },
+  ];
+
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {Object.entries(data).map(([key, count]) => {
-        const meta = ANALYTIC_LABELS[key];
-        const Icon = meta?.icon ?? BarChart3;
-        return (
-          <Card key={key}>
-            <CardBody className="flex items-center gap-3">
-              <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-soft text-brand">
-                <Icon className="h-5 w-5" />
-              </span>
-              <div>
-                <p className="text-2xl font-bold text-fg">{count}</p>
-                <p className="text-xs text-muted">{meta?.label ?? key}</p>
-              </div>
-            </CardBody>
-          </Card>
-        );
-      })}
+    <div className="space-y-6">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {Object.entries(data).map(([key, count]) => {
+          const meta = ANALYTIC_LABELS[key];
+          const Icon = meta?.icon ?? BarChart3;
+          return (
+            <Card key={key} className="card-hover">
+              <CardBody className="flex items-center gap-3">
+                <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-gradient text-white">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <div>
+                  <p className="text-2xl font-extrabold text-fg">{count}</p>
+                  <p className="text-xs text-muted">{meta?.label ?? key}</p>
+                </div>
+              </CardBody>
+            </Card>
+          );
+        })}
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-3">
+        <Card className="lg:col-span-2">
+          <CardHeader title="Platform activity" subtitle="Counts across core entities" />
+          <CardBody>
+            <BarChart data={barData} />
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader title="Feedback breakdown" subtitle="By type" />
+          <CardBody>
+            <DonutChart segments={donut} />
+          </CardBody>
+        </Card>
+      </div>
     </div>
   );
 }

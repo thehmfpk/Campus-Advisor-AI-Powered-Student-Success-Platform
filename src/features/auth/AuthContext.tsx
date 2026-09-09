@@ -9,6 +9,7 @@ import {
 } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { isAdminEmail } from '@/lib/adminConfig';
 import type { Role } from '@/types/db';
 
 export interface SignUpInput {
@@ -77,8 +78,9 @@ async function ensureUserRecords(
 async function loadAuthUser(session: Session | null): Promise<AuthUser | null> {
   if (!session?.user || !supabase) return null;
   const meta = session.user.user_metadata ?? {};
+  const email = session.user.email ?? '';
   let role: Role = (meta.role as Role) ?? 'student';
-  let fullName = (meta.full_name as string) ?? session.user.email ?? 'Student';
+  let fullName = (meta.full_name as string) ?? email ?? 'Student';
 
   const { data: userRow } = await supabase
     .from('users')
@@ -86,6 +88,19 @@ async function loadAuthUser(session: Session | null): Promise<AuthUser | null> {
     .eq('id', session.user.id)
     .maybeSingle();
   if (userRow?.role) role = userRow.role as Role;
+
+  // Configured admin emails always get the admin role. Also persist it to the
+  // DB (best-effort) so Supabase RLS admin policies apply server-side too.
+  if (isAdminEmail(email)) {
+    role = 'admin';
+    if (userRow?.role !== 'admin') {
+      try {
+        await supabase.from('users').upsert({ id: session.user.id, email, role: 'admin' }, { onConflict: 'id' });
+      } catch {
+        /* non-fatal — client still treats them as admin */
+      }
+    }
+  }
 
   const { data: profile } = await supabase
     .from('student_profiles')
