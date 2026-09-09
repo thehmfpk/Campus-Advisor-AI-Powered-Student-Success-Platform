@@ -316,7 +316,7 @@ export default function ProfilePage() {
                   <div>
                     <p className="text-sm font-medium text-fg">{s.subject_name}</p>
                     <p className="text-xs text-muted">
-                      {s.credit_hours} credit hours{s.grade ? ` · Grade ${s.grade}` : ''}
+                      {s.credit_hours} credit hours{s.grade ? `, Grade ${s.grade}` : ''}
                     </p>
                   </div>
                   <button
@@ -353,7 +353,7 @@ export default function ProfilePage() {
                 value={newSubject.grade}
                 onChange={(e) => setNewSubject({ ...newSubject, grade: e.target.value })}
               >
-                <option value="">—</option>
+                <option value="">No grade</option>
                 {GRADES.map((g) => (
                   <option key={g} value={g}>
                     {g}

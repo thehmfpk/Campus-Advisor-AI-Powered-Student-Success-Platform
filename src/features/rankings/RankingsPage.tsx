@@ -125,7 +125,7 @@ function RankingRow({ record }: { record: RankingRecord }) {
         <div className="hidden text-right sm:block">
           <Badge tone="neutral">{record.category}</Badge>
           <p className="mt-1 text-xs text-muted">
-            {record.source} · {record.year}
+            {record.source} ({record.year})
           </p>
         </div>
       </CardBody>

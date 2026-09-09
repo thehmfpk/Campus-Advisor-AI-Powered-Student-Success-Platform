@@ -10,7 +10,7 @@ export function CvTemplate({ cv, avatarUrl }: { cv: CvData; avatarUrl?: string |
   const name = cv.personal?.full_name || 'Your Name';
   const contact = [cv.personal?.email, cv.personal?.phone, cv.personal?.location]
     .filter(Boolean)
-    .join('  •  ');
+    .join('   |   ');
 
   return (
     <div
@@ -30,7 +30,7 @@ export function CvTemplate({ cv, avatarUrl }: { cv: CvData; avatarUrl?: string |
             <p className="mt-1 text-xs text-neutral-600">
               {cv.links.map((l, i) => (
                 <span key={i}>
-                  {i > 0 && '  •  '}
+                  {i > 0 && '   |   '}
                   {l.label}: {l.url}
                 </span>
               ))}
@@ -54,7 +54,7 @@ export function CvTemplate({ cv, avatarUrl }: { cv: CvData; avatarUrl?: string |
 
       {cv.skills.length > 0 && (
         <Section title="Skills">
-          <p>{cv.skills.join('  •  ')}</p>
+          <p>{cv.skills.join('   |   ')}</p>
         </Section>
       )}
 
@@ -137,7 +137,7 @@ export function CvTemplate({ cv, avatarUrl }: { cv: CvData; avatarUrl?: string |
 
       {cv.languages.length > 0 && (
         <Section title="Languages">
-          <p>{cv.languages.join('  •  ')}</p>
+          <p>{cv.languages.join('   |   ')}</p>
         </Section>
       )}
     </div>

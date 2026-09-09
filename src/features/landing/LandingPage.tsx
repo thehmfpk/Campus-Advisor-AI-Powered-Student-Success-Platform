@@ -85,7 +85,7 @@ export default function LandingPage() {
         <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 pb-16 pt-10 lg:grid-cols-2 lg:pb-20 lg:pt-14">
           <div className="animate-fade-in">
             <span className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand-soft px-3 py-1 text-xs font-semibold text-brand">
-              <Sparkles className="h-3.5 w-3.5" /> AI-powered • 100% free • Student-first
+              <Sparkles className="h-3.5 w-3.5" /> AI powered, 100% free, student first
             </span>
             <h1 className="mt-5 text-4xl font-extrabold leading-[1.1] tracking-tight text-fg sm:text-5xl lg:text-6xl">
               Your AI-Powered <span className="text-gradient">Campus Companion</span>
@@ -136,7 +136,7 @@ export default function LandingPage() {
                   <span className="text-xs text-muted">AI Match</span>
                   <span className="text-lg font-bold text-accent">87%</span>
                 </div>
-                <p className="mt-1 text-xs font-medium text-fg">Frontend Intern · Remote</p>
+                <p className="mt-1 text-xs font-medium text-fg">Frontend Intern, Remote</p>
               </div>
               <div className="animate-float absolute -bottom-6 -left-6 w-40 rounded-2xl border border-border bg-surface p-3 shadow-xl" style={{ animationDelay: '1.5s' }}>
                 <span className="text-xs text-muted">CGPA</span>
@@ -241,7 +241,7 @@ export default function LandingPage() {
             <span className="font-bold text-fg">Campus Advisor</span>
           </div>
           <p>Your AI-Powered Campus Companion.</p>
-          <p className="text-xs">Built free-tier-first · No credit card required · Made with Kiro.</p>
+          <p className="text-xs">Built free tier first. No credit card required. Made with Kiro.</p>
           {/* Discreet admin entry — low-visibility, for staff only */}
           <Link to="/admin/login" className="mt-2 text-[11px] text-muted/50 transition hover:text-brand">
             Admin

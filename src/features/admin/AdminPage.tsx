@@ -12,6 +12,7 @@ import {
   Lightbulb,
   GraduationCap,
   Star,
+  ShieldCheck,
   LogOut,
   ArrowLeft,
   Trash2,
@@ -172,9 +173,9 @@ function StudentsSection() {
                 {students.map((s) => (
                   <tr key={s.id}>
                     <td className="py-2 font-medium text-fg">{s.full_name}</td>
-                    <td className="py-2 text-muted">{s.roll_number ?? '—'}</td>
-                    <td className="py-2 text-muted">{s.university_name ?? '—'}</td>
-                    <td className="py-2 text-muted">{s.semester ?? '—'}</td>
+                    <td className="py-2 text-muted">{s.roll_number ?? 'N/A'}</td>
+                    <td className="py-2 text-muted">{s.university_name ?? 'N/A'}</td>
+                    <td className="py-2 text-muted">{s.semester ?? 'N/A'}</td>
                     <td className="py-2 text-right">
                       <Button
                         size="sm"
@@ -230,7 +231,7 @@ function UniversitiesSection() {
             {universities.map((u) => (
               <div key={u.id} className="flex items-center justify-between py-2">
                 <span className="text-sm text-fg">
-                  {u.name} <span className="text-muted">· {u.country}</span>
+                  {u.name} <span className="text-muted">({u.country})</span>
                 </span>
                 <button onClick={() => remove.mutate(u.id)} className="text-muted hover:text-danger">
                   <Trash2 className="h-4 w-4" />
@@ -287,7 +288,7 @@ function JobsSection() {
             {jobs.map((j) => (
               <div key={j.id} className="flex items-center justify-between py-2">
                 <span className="text-sm text-fg">
-                  {j.title} <span className="text-muted">· {j.company}</span>
+                  {j.title} <span className="text-muted">({j.company})</span>
                 </span>
                 <button onClick={() => remove.mutate(j.id)} className="text-muted hover:text-danger">
                   <Trash2 className="h-4 w-4" />
@@ -342,7 +343,7 @@ function RankingsSection() {
                 <span className="text-fg">
                   #{r.position} {r.university_name}{' '}
                   <span className="text-muted">
-                    · {r.source} ({r.year})
+                    {r.source} ({r.year})
                   </span>
                 </span>
                 <button onClick={() => remove.mutate(r.id)} className="text-muted hover:text-danger">
@@ -421,7 +422,7 @@ function FeedbackSection() {
               <div key={f.id as string} className="rounded-xl border border-border p-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-fg">
-                    {(f.university_name as string) ?? 'University'} · {f.category as string}
+                    {(f.university_name as string) ?? 'University'} ({f.category as string})
                   </span>
                   <span className="flex items-center gap-0.5 text-warning">
                     {Array.from({ length: f.rating as number }).map((_, i) => (
@@ -490,21 +491,21 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-bg">
-      <header className="sticky top-0 z-20 border-b border-border bg-surface/80 backdrop-blur">
+    <div className="min-h-screen bg-bg-deep">
+      <header className="sticky top-0 z-20 border-b border-white/10 bg-bg-deep/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-accent text-accent-fg">
-              <GraduationCap className="h-5 w-5" />
+          <div className="flex items-center gap-2.5">
+            <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-gradient text-white shadow-lg">
+              <ShieldCheck className="h-5 w-5" />
             </span>
             <div>
-              <p className="font-semibold text-fg">Campus Advisor</p>
-              <p className="text-xs text-muted">Admin Dashboard</p>
+              <p className="font-bold text-white">Campus Advisor</p>
+              <p className="text-xs text-white/60">Admin Control Center</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <Link to="/app/dashboard">
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="text-white/80 hover:bg-white/10 hover:text-white">
                 <ArrowLeft className="h-4 w-4" /> Student view
               </Button>
             </Link>
@@ -517,7 +518,18 @@ export default function AdminPage() {
       </header>
 
       <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
-        <p className="mb-4 text-sm text-muted">Welcome, {user?.fullName}. Manage the platform below.</p>
+        {/* Welcome hero */}
+        <div className="mb-6 overflow-hidden rounded-2xl bg-brand-gradient p-6 text-white shadow-lg">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15">
+              <ShieldCheck className="h-6 w-6" />
+            </span>
+            <div>
+              <h1 className="text-xl font-extrabold sm:text-2xl">Welcome, {user?.fullName}</h1>
+              <p className="text-sm text-white/85">Manage students, content, community, and platform analytics.</p>
+            </div>
+          </div>
+        </div>
         <Tabs
           active={tab}
           onChange={setTab}

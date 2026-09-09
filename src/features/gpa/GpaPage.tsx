@@ -32,7 +32,7 @@ function GpaCalculator() {
 
   return (
     <Card>
-      <CardHeader title="Semester GPA" subtitle="HEC 4.0 scale · credit-weighted average" />
+      <CardHeader title="Semester GPA" subtitle="HEC 4.0 scale, credit-weighted average" />
       <CardBody className="space-y-3">
         {courses.map((c, i) => (
           <div key={i} className="grid items-end gap-2 sm:grid-cols-[1fr_90px_90px_auto]">

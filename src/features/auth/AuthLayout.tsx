@@ -65,7 +65,7 @@ export function AuthLayout({
           </ul>
         </div>
 
-        <p className="relative text-xs text-white/60">100% free · No credit card required</p>
+        <p className="relative text-xs text-white/60">100% free. No credit card required.</p>
       </div>
 
       {/* Form panel */}

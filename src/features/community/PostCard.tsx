@@ -124,7 +124,7 @@ export function PostCard({ post, myProfileId }: { post: Post; myProfileId?: stri
             <div>
               <p className="text-sm font-semibold text-fg">{post.author_name}</p>
               <p className="text-xs text-muted">
-                {post.university_name ?? 'University'} · {timeAgo(post.created_at)}
+                {post.university_name ?? 'University'}, {timeAgo(post.created_at)}
               </p>
             </div>
           </div>

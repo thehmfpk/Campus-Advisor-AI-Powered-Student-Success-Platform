@@ -80,5 +80,5 @@ export const SEED_JOBS: SeedJob[] = RAW_JOBS.map((j, i) => ({
   apply_url: linkedInSearchUrl(j.title, j.is_remote ? 'Pakistan' : j.location),
   google_url: googleJobsUrl(j.title, j.is_remote ? 'Pakistan' : j.location),
   closes_date: closingDate(j.posted_date, 21 + (i % 4) * 7), // 21–42 days after posting
-  source: 'Curated · apply via LinkedIn/Google Jobs',
+  source: 'Curated (apply via LinkedIn/Google Jobs)',
 }));

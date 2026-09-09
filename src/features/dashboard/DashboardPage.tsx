@@ -168,7 +168,7 @@ export default function DashboardPage() {
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-sm font-medium text-white/80">
-              {profile?.university_name ?? 'Your University'} · {t('dash.currentSemester')} {profile?.semester ?? '—'}
+              {profile?.university_name ?? 'Your University'}, {t('dash.currentSemester')} {profile?.semester ?? 'N/A'}
             </p>
             <h1 className="mt-1 text-2xl font-extrabold sm:text-3xl">
               {greeting(t)}, {firstName}
@@ -185,9 +185,9 @@ export default function DashboardPage() {
 
       {/* Stat cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label={t('dash.currentSemester')} value={`${profile?.semester ?? '—'}`} icon={BookMarked} accent="from-blue-500 to-indigo-500" />
+        <StatCard label={t('dash.currentSemester')} value={`${profile?.semester ?? 'N/A'}`} icon={BookMarked} accent="from-blue-500 to-indigo-500" />
         <StatCard label={t('dash.subjects')} value={`${subjects.length}`} hint={`${subjects.length}/7`} icon={BookOpen} accent="from-cyan-500 to-sky-500" />
-        <StatCard label={t('dash.estimatedGpa')} value={gpa ? gpa.toFixed(2) : '—'} icon={TrendingUp} accent="from-emerald-500 to-teal-500" />
+        <StatCard label={t('dash.estimatedGpa')} value={gpa ? gpa.toFixed(2) : 'N/A'} icon={TrendingUp} accent="from-emerald-500 to-teal-500" />
         <StatCard label={t('dash.skillsTracked')} value={`${profile?.skills?.length ?? 0}`} icon={Target} accent="from-fuchsia-500 to-purple-500" />
       </div>
 

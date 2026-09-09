@@ -92,7 +92,7 @@ function JobCard({ job, profile }: { job: Job; profile: Parameters<typeof comput
               const soon = !closed && days <= 7;
               return (
                 <p className={closed ? 'font-medium text-danger' : soon ? 'font-medium text-warning' : 'text-muted'}>
-                  {closed ? `Closed ${job.closes_date}` : `Closes ${job.closes_date}${soon ? ` · ${days}d left` : ''}`}
+                  {closed ? `Closed ${job.closes_date}` : `Closes ${job.closes_date}${soon ? ` (${days}d left)` : ''}`}
                 </p>
               );
             })()}
