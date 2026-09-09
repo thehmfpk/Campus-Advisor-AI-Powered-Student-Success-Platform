@@ -5,11 +5,14 @@ import { toast } from 'sonner';
 import { studentNav } from './nav';
 import { useAuth } from '@/features/auth/AuthContext';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { useI18n } from '@/i18n/LanguageProvider';
 import { Avatar } from '@/components/ui';
 import { cn } from '@/lib/cn';
 
 export function AppLayout() {
   const { user, signOut } = useAuth();
+  const { t } = useI18n();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -21,7 +24,7 @@ export function AppLayout() {
 
   const navLinks = (
     <nav className="space-y-1">
-      {studentNav.map(({ to, label, icon: Icon }) => (
+      {studentNav.map(({ to, key, label, icon: Icon }) => (
         <NavLink
           key={to}
           to={to}
@@ -36,7 +39,7 @@ export function AppLayout() {
           }
         >
           <Icon className="h-4.5 w-4.5" />
-          {label}
+          {t(key, label)}
         </NavLink>
       ))}
       {user?.role === 'admin' && (
@@ -51,7 +54,7 @@ export function AppLayout() {
           }
         >
           <Shield className="h-4.5 w-4.5" />
-          Admin
+          {t('nav.admin', 'Admin')}
         </NavLink>
       )}
     </nav>
@@ -80,7 +83,7 @@ export function AppLayout() {
             onClick={handleSignOut}
             className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-muted transition hover:bg-surface-2 hover:text-danger"
           >
-            <LogOut className="h-4.5 w-4.5" /> Sign out
+            <LogOut className="h-4.5 w-4.5" /> {t('nav.signOut', 'Sign out')}
           </button>
         </div>
       </aside>
@@ -94,8 +97,11 @@ export function AppLayout() {
         >
           <Menu className="h-5 w-5" />
         </button>
-        <span className="font-semibold text-fg">Campus Advisor</span>
-        <ThemeToggle />
+        <span className="font-semibold text-fg">{t('app.name', 'Campus Advisor')}</span>
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher />
+          <ThemeToggle />
+        </div>
       </header>
 
       {/* Mobile drawer */}
@@ -122,7 +128,7 @@ export function AppLayout() {
               onClick={handleSignOut}
               className="mt-4 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-danger hover:bg-surface-2"
             >
-              <LogOut className="h-4.5 w-4.5" /> Sign out
+              <LogOut className="h-4.5 w-4.5" /> {t('nav.signOut', 'Sign out')}
             </button>
           </div>
         </div>
@@ -132,6 +138,7 @@ export function AppLayout() {
       <div className="lg:pl-64">
         {/* Desktop top bar */}
         <div className="hidden items-center justify-end gap-3 border-b border-border bg-surface/60 px-6 py-3 backdrop-blur lg:flex">
+          <LanguageSwitcher />
           <ThemeToggle />
         </div>
         <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:py-8">

@@ -2,6 +2,7 @@ import { GraduationCap, Bot, Briefcase, Trophy } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { isSupabaseConfigured } from '@/lib/supabase';
 
 export function AuthLayout({
@@ -76,7 +77,8 @@ export function AuthLayout({
             </span>
             <span className="font-bold text-fg">Campus Advisor</span>
           </Link>
-          <div className="ml-auto">
+          <div className="ml-auto flex items-center gap-2">
+            <LanguageSwitcher />
             <ThemeToggle />
           </div>
         </div>

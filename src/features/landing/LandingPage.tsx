@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { useAuth } from '@/features/auth/AuthContext';
 
 const FEATURES = [
@@ -65,6 +66,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-2">
             <a href="#features" className="hidden px-3 text-sm font-medium text-muted hover:text-fg sm:block">Features</a>
             <a href="#how" className="hidden px-3 text-sm font-medium text-muted hover:text-fg sm:block">How it works</a>
+            <LanguageSwitcher />
             <ThemeToggle />
             {user ? (
               <Link to={primaryHref}><Button size="sm">Go to app</Button></Link>

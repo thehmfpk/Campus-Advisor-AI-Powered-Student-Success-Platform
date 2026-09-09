@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'sonner';
 import { ThemeProvider } from '@/app/theme';
+import { LanguageProvider } from '@/i18n/LanguageProvider';
 import { ErrorBoundary } from '@/app/ErrorBoundary';
 import { AppLayout } from '@/app/AppLayout';
 import { PageLoader } from '@/components/ui/PageLoader';
@@ -37,6 +38,7 @@ export function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider>
+        <LanguageProvider>
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
             <AuthProvider>
@@ -104,6 +106,7 @@ export function App() {
           </BrowserRouter>
           <Toaster richColors position="top-right" />
         </QueryClientProvider>
+        </LanguageProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );

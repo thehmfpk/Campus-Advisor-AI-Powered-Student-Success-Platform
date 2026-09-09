@@ -19,13 +19,7 @@ import { useProfile, useSubjects } from '@/features/profile/useProfile';
 import { computeGpa } from '@/lib/grades';
 import { buildRecommendations } from './recommendations';
 import { profileCompletion } from '@/features/profile/completion';
-
-function greeting(): string {
-  const h = new Date().getHours();
-  if (h < 12) return 'Good morning';
-  if (h < 18) return 'Good afternoon';
-  return 'Good evening';
-}
+import { useI18n } from '@/i18n/LanguageProvider';
 
 const QUICK_ACTIONS = [
   { to: '/app/advisor', label: 'Ask AI Advisor', icon: Bot, color: 'from-blue-500 to-indigo-500' },
@@ -89,8 +83,16 @@ function ProgressRing({ value }: { value: number }) {
   );
 }
 
+function greeting(t: (k: string, f?: string) => string): string {
+  const h = new Date().getHours();
+  if (h < 12) return t('dash.greetingMorning', 'Good morning');
+  if (h < 18) return t('dash.greetingAfternoon', 'Good afternoon');
+  return t('dash.greetingEvening', 'Good evening');
+}
+
 export default function DashboardPage() {
   const { user } = useAuth();
+  const { t } = useI18n();
   const { data: profile, isLoading } = useProfile();
   const { data: subjects = [] } = useSubjects(profile?.id);
 
@@ -131,13 +133,13 @@ export default function DashboardPage() {
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-2xl font-extrabold sm:text-3xl">
-              {greeting()}, {firstName}
+              {greeting(t)}, {firstName}
             </h1>
-            <p className="mt-1 text-white/85">Here&apos;s your academic and career overview.</p>
+            <p className="mt-1 text-white/85">{t('dash.overview')}</p>
           </div>
           <Link to="/app/advisor">
             <Button variant="secondary" className="shadow-lg">
-              <Bot className="h-4 w-4" /> Ask AI Advisor
+              <Bot className="h-4 w-4" /> {t('dash.askAI')}
             </Button>
           </Link>
         </div>
