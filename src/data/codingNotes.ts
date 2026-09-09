@@ -278,4 +278,48 @@ export const SEED_NOTES: SeedNote[] = [
         'Focus on patterns, not memorized answers: two pointers, sliding window, hashing, BFS/DFS, binary search, sorting, recursion, and basic dynamic programming. Always analyze and state time and space complexity. Talk through your plan before you code, and test with edge cases. If stuck, start with brute force and optimize step by step. Practice explaining clearly — communication matters as much as the solution. Platforms like LeetCode, HackerRank, and Codeforces are great for practice.',
     },
   },
+  {
+    technology: 'C',
+    slug: 'c',
+    title: 'C — Close to the Machine',
+    order: 13,
+    sections: {
+      introduction:
+        'C is a compact, fast, procedural programming language created by Dennis Ritchie in the early 1970s. It is often called the "mother of modern languages" because C++, Java, C#, and many others borrow its syntax. C gives you direct control over memory and hardware with very little abstraction, which makes it the language of operating systems (Linux is written in C), embedded systems, device drivers, and performance-critical software. Learning C teaches you how computers actually work: memory addresses, the stack and heap, and how higher-level features are built on simple primitives.',
+      fundamentals:
+        'A C program has functions, with main() as the entry point. Basic types: int, char, float, double, plus modifiers (short, long, unsigned). Variables must be declared with a type. Statements end with a semicolon and blocks use braces {}. C has no built-in strings — a string is an array of char ending in a null terminator (\\0). Pointers (int *p) store memory addresses and are central to C. Memory is either automatic (stack, freed when a function returns) or dynamic (heap, via malloc/free). The preprocessor (#include, #define) runs before compilation. You compile with a compiler like gcc.',
+      syntax:
+        '#include <stdio.h>\n#include <stdlib.h>\n\nint add(int a, int b) {\n    return a + b;\n}\n\nint main(void) {\n    int nums[3] = {1, 2, 3};\n    for (int i = 0; i < 3; i++) {\n        printf("%d ", nums[i]);\n    }\n    printf("\\nSum: %d\\n", add(2, 3));\n\n    /* dynamic memory */\n    int *arr = malloc(5 * sizeof(int));\n    if (arr != NULL) {\n        arr[0] = 42;\n        free(arr);   /* always free what you malloc */\n    }\n    return 0;\n}',
+      concepts:
+        'Pointers and memory: &x gives the address of x; *p dereferences a pointer to read/write the value it points to. Arrays and pointers are closely related — an array name decays to a pointer to its first element. Manual memory management: malloc/calloc allocate on the heap, free releases it; forgetting to free causes a memory leak, and using freed memory causes undefined behavior. Strings are char arrays terminated by \\0; use functions like strlen, strcpy, strcmp (from <string.h>). Pass-by-value is the default; to modify a caller\u2019s variable, pass a pointer to it. The stack holds local variables and function calls; the heap holds dynamic allocations.',
+      examples:
+        '#include <string.h>\n\n/* Swap two ints using pointers */\nvoid swap(int *a, int *b) {\n    int tmp = *a;\n    *a = *b;\n    *b = tmp;\n}\n\nint main(void) {\n    int x = 1, y = 2;\n    swap(&x, &y);   /* now x=2, y=1 */\n\n    char name[20];\n    strcpy(name, "Ada");\n    printf("len=%lu\\n", strlen(name));\n    return 0;\n}',
+      best_practices:
+        'Always initialize variables and pointers (set unused pointers to NULL). Free every block you malloc, and set the pointer to NULL afterward to avoid dangling pointers. Check the return value of malloc for NULL. Avoid buffer overflows — never write past an array\u2019s bounds; prefer bounded functions (snprintf over sprintf, strncpy carefully). Keep functions short. Compile with warnings on (gcc -Wall -Wextra) and use a tool like valgrind to catch memory errors.',
+      interview_tips:
+        'Explain pointers, the difference between the stack and heap, and what a memory leak / dangling pointer / segmentation fault is. Know how strings work (null-terminated char arrays) and how arrays decay to pointers. Be able to write pointer-based functions (swap, reverse a string). Explain pass-by-value vs passing a pointer. Understand malloc/free and why you must free memory.',
+    },
+  },
+  {
+    technology: 'TypeScript',
+    slug: 'typescript',
+    title: 'TypeScript — JavaScript with Types',
+    order: 14,
+    sections: {
+      introduction:
+        'TypeScript is a superset of JavaScript developed by Microsoft that adds a static type system. All valid JavaScript is valid TypeScript, but TypeScript lets you annotate types so the compiler catches errors before your code runs. It compiles ("transpiles") down to plain JavaScript that runs anywhere JS runs — browsers, Node.js, everywhere. TypeScript has become the default for serious front-end and back-end projects (React, Angular, Node) because types make large codebases safer, easier to refactor, and self-documenting, with excellent editor autocompletion.',
+      fundamentals:
+        'You annotate variables, parameters, and return values with types: string, number, boolean, arrays (number[]), objects, and more. interface and type define the shape of objects. union types (A | B) allow multiple possibilities; literal types restrict to specific values. Generics (<T>) write reusable, type-safe code. Enums define named constants. Optional properties use ?, and the compiler enforces null/undefined handling in strict mode. TypeScript infers many types automatically, so you do not annotate everything. You configure it with tsconfig.json and compile with tsc (or a bundler like Vite handles it).',
+      syntax:
+        "// Basic types & interfaces\ninterface User {\n  id: number;\n  name: string;\n  email?: string;         // optional\n  role: 'student' | 'admin'; // union of literals\n}\n\nfunction greet(user: User): string {\n  return `Hello, ${user.name}`;\n}\n\n// Generics\nfunction first<T>(arr: T[]): T | undefined {\n  return arr[0];\n}\nconst n = first<number>([1, 2, 3]); // number | undefined",
+      concepts:
+        'Structural typing: TypeScript checks the shape of a value, not its declared name — if it "looks like" the type, it fits. interface vs type: interfaces are extendable and great for object shapes; type aliases can also express unions, intersections, and primitives. Union & intersection types combine possibilities. Type narrowing: using typeof, instanceof, or checks lets the compiler refine a union to a specific type inside a branch. Generics parameterize types for reuse (e.g. Array<T>, Promise<T>). Utility types (Partial<T>, Pick<T,K>, Omit<T,K>, Record<K,V>) transform existing types. strict mode forces you to handle null/undefined, catching a huge class of bugs. Types are erased at compile time — they do not exist at runtime.',
+      examples:
+        "// Type narrowing\nfunction format(value: string | number): string {\n  if (typeof value === 'number') {\n    return value.toFixed(2);   // value is number here\n  }\n  return value.toUpperCase();  // value is string here\n}\n\n// Utility types\ninterface Todo { id: number; title: string; done: boolean; }\ntype TodoDraft = Omit<Todo, 'id'>;          // { title; done }\ntype TodoUpdate = Partial<Todo>;            // all optional\n\n// Typed async\nasync function getUser(id: number): Promise<User> {\n  const res = await fetch(`/api/users/${id}`);\n  return res.json() as Promise<User>;\n}",
+      best_practices:
+        'Enable strict mode in tsconfig for maximum safety. Prefer type inference — do not annotate what the compiler already knows. Avoid the any type; use unknown when a type is truly unknown and narrow it. Model data with interfaces/types and reuse them across the app. Use union literal types instead of loose strings for fixed options. Leverage utility types (Partial, Pick, Omit) rather than duplicating shapes. Keep types close to where they are used, and share domain types from a central file.',
+      interview_tips:
+        'Explain what TypeScript adds over JavaScript and that types are erased at runtime. Know the difference between interface and type, and between union (|) and intersection (&). Explain generics and give an example. Describe type narrowing and why strict null checks matter. Know common utility types (Partial, Pick, Omit, Record). Explain the difference between any and unknown.',
+    },
+  },
 ];
