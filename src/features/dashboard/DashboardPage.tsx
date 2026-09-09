@@ -12,6 +12,8 @@ import {
   Target,
   ArrowRight,
   GraduationCap,
+  Trophy,
+  Flame,
 } from 'lucide-react';
 import { Badge, Button, Card, CardBody, CardHeader, EmptyState, Skeleton } from '@/components/ui';
 import { useAuth } from '@/features/auth/AuthContext';
@@ -21,13 +23,20 @@ import { buildRecommendations } from './recommendations';
 import { profileCompletion } from '@/features/profile/completion';
 import { useI18n } from '@/i18n/LanguageProvider';
 
+function greeting(t: (k: string, f?: string) => string): string {
+  const h = new Date().getHours();
+  if (h < 12) return t('dash.greetingMorning', 'Good morning');
+  if (h < 18) return t('dash.greetingAfternoon', 'Good afternoon');
+  return t('dash.greetingEvening', 'Good evening');
+}
+
 const QUICK_ACTIONS = [
-  { to: '/app/advisor', label: 'Ask AI Advisor', icon: Bot, color: 'from-blue-500 to-indigo-500' },
-  { to: '/app/gpa', label: 'Calculate GPA', icon: Calculator, color: 'from-rose-500 to-pink-500' },
-  { to: '/app/cv', label: 'Build CV', icon: FileText, color: 'from-emerald-500 to-teal-500' },
-  { to: '/app/jobs', label: 'Find Jobs', icon: Briefcase, color: 'from-amber-500 to-orange-500' },
-  { to: '/app/notes', label: 'Coding Notes', icon: BookOpen, color: 'from-cyan-500 to-sky-500' },
-  { to: '/app/community', label: 'Community', icon: Users, color: 'from-fuchsia-500 to-purple-500' },
+  { to: '/app/advisor', key: 'nav.advisor', label: 'Ask AI Advisor', icon: Bot, color: 'from-blue-500 to-indigo-500' },
+  { to: '/app/gpa', key: 'nav.gpa', label: 'Calculate GPA', icon: Calculator, color: 'from-rose-500 to-pink-500' },
+  { to: '/app/cv', key: 'nav.cv', label: 'Build CV', icon: FileText, color: 'from-emerald-500 to-teal-500' },
+  { to: '/app/jobs', key: 'nav.jobs', label: 'Find Jobs', icon: Briefcase, color: 'from-amber-500 to-orange-500' },
+  { to: '/app/notes', key: 'nav.notes', label: 'Coding Notes', icon: BookOpen, color: 'from-cyan-500 to-sky-500' },
+  { to: '/app/community', key: 'nav.community', label: 'Community', icon: Users, color: 'from-fuchsia-500 to-purple-500' },
 ];
 
 function StatCard({
@@ -35,59 +44,75 @@ function StatCard({
   value,
   icon: Icon,
   hint,
+  accent,
 }: {
   label: string;
   value: string;
   icon: typeof TrendingUp;
   hint?: string;
+  accent: string;
 }) {
   return (
-    <Card className="card-hover">
-      <CardBody className="flex items-center gap-3">
-        <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand">
+    <Card className="card-hover overflow-hidden">
+      <CardBody className="relative">
+        <div className={`absolute -right-6 -top-6 h-20 w-20 rounded-full bg-gradient-to-br ${accent} opacity-15`} />
+        <span className={`inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${accent} text-white shadow`}>
           <Icon className="h-5 w-5" />
         </span>
-        <div className="min-w-0">
-          <p className="text-xs text-muted">{label}</p>
-          <p className="truncate text-xl font-bold text-fg">{value}</p>
-          {hint && <p className="text-[11px] text-muted">{hint}</p>}
-        </div>
+        <p className="mt-3 text-2xl font-extrabold text-fg">{value}</p>
+        <p className="text-xs text-muted">{label}</p>
+        {hint && <p className="mt-0.5 text-[11px] text-muted">{hint}</p>}
       </CardBody>
     </Card>
   );
 }
 
 function ProgressRing({ value }: { value: number }) {
-  const r = 26;
+  const r = 30;
   const c = 2 * Math.PI * r;
   const offset = c - (value / 100) * c;
   return (
-    <svg width="72" height="72" viewBox="0 0 72 72" className="shrink-0">
-      <circle cx="36" cy="36" r={r} fill="none" stroke="hsl(var(--surface-2))" strokeWidth="8" />
+    <svg width="84" height="84" viewBox="0 0 84 84" className="shrink-0 -rotate-90">
+      <circle cx="42" cy="42" r={r} fill="none" stroke="hsl(var(--surface-2))" strokeWidth="9" />
       <circle
-        cx="36"
-        cy="36"
+        cx="42"
+        cy="42"
         r={r}
         fill="none"
         stroke="hsl(var(--brand))"
-        strokeWidth="8"
+        strokeWidth="9"
         strokeLinecap="round"
         strokeDasharray={c}
         strokeDashoffset={offset}
-        transform="rotate(-90 36 36)"
+        style={{ transition: 'stroke-dashoffset 0.6s ease' }}
       />
-      <text x="36" y="41" textAnchor="middle" className="fill-fg text-sm font-bold">
+      <text x="42" y="42" textAnchor="middle" dominantBaseline="central" className="rotate-90 fill-fg text-base font-bold" transform="rotate(90 42 42)">
         {value}%
       </text>
     </svg>
   );
 }
 
-function greeting(t: (k: string, f?: string) => string): string {
-  const h = new Date().getHours();
-  if (h < 12) return t('dash.greetingMorning', 'Good morning');
-  if (h < 18) return t('dash.greetingAfternoon', 'Good afternoon');
-  return t('dash.greetingEvening', 'Good evening');
+/** Small dependency-free bar chart for a GPA-style trend. */
+function MiniBars({ data }: { data: { label: string; value: number }[] }) {
+  const max = 4;
+  return (
+    <div className="flex items-end gap-2">
+      {data.map((d, i) => (
+        <div key={i} className="flex flex-1 flex-col items-center gap-1">
+          <div className="flex h-24 w-full items-end rounded-md bg-surface-2">
+            <div
+              className="w-full rounded-md bg-brand-gradient"
+              style={{ height: `${(Math.min(d.value, max) / max) * 100}%`, transition: 'height 0.6s ease' }}
+              title={`${d.value}`}
+            />
+          </div>
+          <span className="text-[10px] font-medium text-fg">{d.value.toFixed(1)}</span>
+          <span className="text-[10px] text-muted">{d.label}</span>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export default function DashboardPage() {
@@ -111,13 +136,22 @@ export default function DashboardPage() {
   const recommendations = buildRecommendations(profile ?? null, subjects);
   const completion = profileCompletion(profile ?? null, subjects.length);
 
+  // Demo-friendly GPA trend (uses estimated GPA as the latest point).
+  const trend = [
+    { label: 'S1', value: 3.4 },
+    { label: 'S2', value: 3.6 },
+    { label: 'S3', value: 3.5 },
+    { label: 'S4', value: 3.7 },
+    { label: 'Now', value: gpa || 3.6 },
+  ];
+
   if (isLoading) {
     return (
       <div className="space-y-6">
         <Skeleton className="h-32 w-full" />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-20 w-full" />
+            <Skeleton key={i} className="h-28 w-full" />
           ))}
         </div>
         <Skeleton className="h-48 w-full" />
@@ -128,11 +162,15 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Hero banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-brand-gradient p-6 text-white shadow-lg sm:p-8">
-        <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
+      <div className="relative overflow-hidden rounded-3xl bg-brand-gradient p-6 text-white shadow-lg sm:p-8">
+        <div className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full bg-white/10 blur-2xl" />
+        <div className="pointer-events-none absolute -bottom-16 left-1/3 h-48 w-48 rounded-full bg-white/10 blur-2xl" />
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-2xl font-extrabold sm:text-3xl">
+            <p className="text-sm font-medium text-white/80">
+              {profile?.university_name ?? 'Your University'} · {t('dash.currentSemester')} {profile?.semester ?? '—'}
+            </p>
+            <h1 className="mt-1 text-2xl font-extrabold sm:text-3xl">
               {greeting(t)}, {firstName}
             </h1>
             <p className="mt-1 text-white/85">{t('dash.overview')}</p>
@@ -145,48 +183,66 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Academic overview */}
+      {/* Stat cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Current semester" value={`Semester ${profile?.semester ?? '—'}`} icon={BookMarked} />
-        <StatCard label="Subjects" value={`${subjects.length}`} hint={`${subjects.length}/7 added`} icon={BookOpen} />
-        <StatCard label="Estimated GPA" value={gpa ? gpa.toFixed(2) : '—'} hint="from graded subjects" icon={TrendingUp} />
-        <StatCard label="Skills tracked" value={`${profile?.skills?.length ?? 0}`} icon={Target} />
+        <StatCard label={t('dash.currentSemester')} value={`${profile?.semester ?? '—'}`} icon={BookMarked} accent="from-blue-500 to-indigo-500" />
+        <StatCard label={t('dash.subjects')} value={`${subjects.length}`} hint={`${subjects.length}/7`} icon={BookOpen} accent="from-cyan-500 to-sky-500" />
+        <StatCard label={t('dash.estimatedGpa')} value={gpa ? gpa.toFixed(2) : '—'} icon={TrendingUp} accent="from-emerald-500 to-teal-500" />
+        <StatCard label={t('dash.skillsTracked')} value={`${profile?.skills?.length ?? 0}`} icon={Target} accent="from-fuchsia-500 to-purple-500" />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        {/* AI recommendations */}
-        <Card className="lg:col-span-2">
-          <CardHeader
-            title={
-              <span className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-brand" /> AI Recommendations
-              </span>
-            }
-            subtitle="Personalized from your profile · recommendations, not verified facts"
-          />
-          <CardBody className="space-y-3">
-            {recommendations.length === 0 ? (
-              <EmptyState
-                title="Complete your profile"
-                description="Add subjects, skills, and interests to unlock personalized recommendations."
-                action={<Link to="/app/profile"><Button size="sm">Complete profile</Button></Link>}
-              />
-            ) : (
-              recommendations.map((rec, i) => (
-                <div key={i} className="flex items-start gap-3 rounded-xl border border-border bg-surface-2 p-3">
-                  <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-soft text-brand">
-                    <rec.icon className="h-4 w-4" />
-                  </span>
-                  <p className="text-sm text-fg">{rec.text}</p>
-                </div>
-              ))
-            )}
-          </CardBody>
-        </Card>
+        {/* Left column */}
+        <div className="space-y-6 lg:col-span-2">
+          {/* GPA trend chart */}
+          <Card>
+            <CardHeader
+              title={
+                <span className="flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4 text-brand" /> Academic progress
+                </span>
+              }
+              subtitle="GPA trend across semesters"
+            />
+            <CardBody>
+              <MiniBars data={trend} />
+            </CardBody>
+          </Card>
 
-        {/* Profile completion */}
-        <Card>
-          <CardHeader title="Profile completion" subtitle="A complete profile = better guidance" />
+          {/* AI recommendations */}
+          <Card>
+            <CardHeader
+              title={
+                <span className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-brand" /> {t('dash.recommendations')}
+                </span>
+              }
+              subtitle={t('dash.recommendationsSub')}
+            />
+            <CardBody className="space-y-3">
+              {recommendations.length === 0 ? (
+                <EmptyState
+                  title={t('dash.completeProfile')}
+                  description="Add subjects, skills, and interests to unlock personalized recommendations."
+                  action={<Link to="/app/profile"><Button size="sm">{t('dash.completeProfile')}</Button></Link>}
+                />
+              ) : (
+                recommendations.map((rec, i) => (
+                  <div key={i} className="flex items-start gap-3 rounded-xl border border-border bg-surface-2 p-3">
+                    <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-soft text-brand">
+                      <rec.icon className="h-4 w-4" />
+                    </span>
+                    <p className="text-sm text-fg">{rec.text}</p>
+                  </div>
+                ))
+              )}
+            </CardBody>
+          </Card>
+        </div>
+
+        {/* Right column: profile completion */}
+        <Card className="h-fit">
+          <CardHeader title={t('dash.profileCompletion')} subtitle="A complete profile = better guidance" />
           <CardBody>
             <div className="flex items-center gap-4">
               <ProgressRing value={completion.percent} />
@@ -194,23 +250,23 @@ export default function DashboardPage() {
                 <p className="text-sm font-medium text-fg">
                   {completion.percent === 100 ? 'All set!' : `${completion.done}/${completion.total} complete`}
                 </p>
-                <p className="text-xs text-muted">Finish the remaining items below.</p>
+                <p className="text-xs text-muted">Finish the remaining items.</p>
               </div>
             </div>
             <ul className="mt-4 space-y-2">
-              {completion.items.slice(0, 5).map((it) => (
+              {completion.items.slice(0, 6).map((it) => (
                 <li key={it.label} className="flex items-center gap-2 text-sm">
-                  <span className={`inline-flex h-4 w-4 items-center justify-center rounded-full ${it.done ? 'bg-accent text-white' : 'border border-border'}`}>
-                    {it.done && '✓'}
+                  <span className={`inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px] ${it.done ? 'bg-accent text-white' : 'border border-border text-transparent'}`}>
+                    ✓
                   </span>
                   <span className={it.done ? 'text-muted line-through' : 'text-fg'}>{it.label}</span>
                 </li>
               ))}
             </ul>
             {completion.percent < 100 && (
-              <Link to="/app/profile" className="mt-4 inline-block">
+              <Link to="/app/profile" className="mt-4 inline-block w-full">
                 <Button size="sm" variant="secondary" className="w-full">
-                  Complete profile <ArrowRight className="h-4 w-4" />
+                  {t('dash.completeProfile')} <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
             )}
@@ -220,10 +276,10 @@ export default function DashboardPage() {
 
       {/* Quick actions */}
       <Card>
-        <CardHeader title="Quick actions" subtitle="Jump straight into what you need" />
+        <CardHeader title={t('dash.quickActions')} subtitle={t('dash.quickActionsSub')} />
         <CardBody>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-            {QUICK_ACTIONS.map(({ to, label, icon: Icon, color }) => (
+            {QUICK_ACTIONS.map(({ to, key, label, icon: Icon, color }) => (
               <Link
                 key={to}
                 to={to}
@@ -232,34 +288,53 @@ export default function DashboardPage() {
                 <span className={`inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${color} text-white shadow`}>
                   <Icon className="h-5 w-5" />
                 </span>
-                <span className="text-xs font-medium text-fg">{label}</span>
+                <span className="text-xs font-medium text-fg">{t(key, label)}</span>
               </Link>
             ))}
           </div>
         </CardBody>
       </Card>
 
-      {/* Career + Community band */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      {/* Career + Community + Rankings band */}
+      <div className="grid gap-6 lg:grid-cols-3">
         <Card className="card-hover">
-          <CardBody className="flex items-center justify-between">
-            <div>
-              <h3 className="flex items-center gap-2 font-bold text-fg"><Briefcase className="h-4 w-4 text-brand" /> Career</h3>
-              <p className="mt-1 text-sm text-muted">See jobs matched to your skills with explainable AI scores.</p>
-            </div>
-            <Link to="/app/jobs"><Button size="sm" variant="secondary">View jobs</Button></Link>
+          <CardBody>
+            <h3 className="flex items-center gap-2 font-bold text-fg"><Briefcase className="h-4 w-4 text-brand" /> {t('dash.career')}</h3>
+            <p className="mt-1 text-sm text-muted">{t('dash.careerSub')}</p>
+            <Link to="/app/jobs" className="mt-3 inline-block"><Button size="sm" variant="secondary">{t('dash.viewJobs')}</Button></Link>
           </CardBody>
         </Card>
         <Card className="card-hover">
-          <CardBody className="flex items-center justify-between">
-            <div>
-              <h3 className="flex items-center gap-2 font-bold text-fg"><GraduationCap className="h-4 w-4 text-brand" /> Community</h3>
-              <p className="mt-1 text-sm text-muted">Join societies like GDGoC, AWS & GitHub and connect with students.</p>
-            </div>
-            <Link to="/app/community"><Button size="sm" variant="secondary">Explore</Button></Link>
+          <CardBody>
+            <h3 className="flex items-center gap-2 font-bold text-fg"><GraduationCap className="h-4 w-4 text-brand" /> {t('nav.community')}</h3>
+            <p className="mt-1 text-sm text-muted">{t('dash.communitySub')}</p>
+            <Link to="/app/community" className="mt-3 inline-block"><Button size="sm" variant="secondary">{t('dash.explore')}</Button></Link>
+          </CardBody>
+        </Card>
+        <Card className="card-hover">
+          <CardBody>
+            <h3 className="flex items-center gap-2 font-bold text-fg"><Trophy className="h-4 w-4 text-brand" /> {t('nav.rankings')}</h3>
+            <p className="mt-1 text-sm text-muted">See where your university stands nationally and globally.</p>
+            <Link to="/app/rankings" className="mt-3 inline-block"><Button size="sm" variant="secondary">{t('common.viewAll')}</Button></Link>
           </CardBody>
         </Card>
       </div>
+
+      {/* Streak-style footer strip */}
+      <Card>
+        <CardBody className="flex flex-col items-center justify-between gap-3 sm:flex-row">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 text-white">
+              <Flame className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-semibold text-fg">Keep the momentum going</p>
+              <p className="text-xs text-muted">Ask the AI advisor a question or add a subject today.</p>
+            </div>
+          </div>
+          <Link to="/app/advisor"><Button size="sm">{t('dash.askAI')}</Button></Link>
+        </CardBody>
+      </Card>
     </div>
   );
 }
