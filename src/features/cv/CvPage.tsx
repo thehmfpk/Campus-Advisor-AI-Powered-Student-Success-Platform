@@ -40,6 +40,7 @@ export default function CvPage() {
   const [aiText, setAiText] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
   const [targetRole, setTargetRole] = useState('');
+  const [includePhoto, setIncludePhoto] = useState(false);
 
   const skills = useCommaList(cv.skills);
   const languages = useCommaList(cv.languages);
@@ -224,8 +225,19 @@ export default function CvPage() {
             <Badge tone="neutral">Live preview</Badge>
             <Badge tone="success">ATS-friendly</Badge>
           </div>
+          {profile?.avatar_url && (
+            <label className="mb-2 flex items-center gap-2 text-sm text-fg no-print">
+              <input
+                type="checkbox"
+                checked={includePhoto}
+                onChange={(e) => setIncludePhoto(e.target.checked)}
+                className="h-4 w-4 rounded border-border"
+              />
+              Include my profile photo on the CV
+            </label>
+          )}
           <div className="overflow-hidden rounded-2xl border border-border shadow-card">
-            <CvTemplate cv={previewCv} />
+            <CvTemplate cv={previewCv} avatarUrl={includePhoto ? profile?.avatar_url : null} />
           </div>
         </div>
       </div>

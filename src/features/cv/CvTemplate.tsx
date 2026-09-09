@@ -2,9 +2,11 @@ import type { CvData } from './useCv';
 
 /**
  * ATS-friendly CV template (R8): single column, standard headings, semantic
- * markup, no images/tables — prints cleanly to PDF via the browser.
+ * markup — prints cleanly to PDF via the browser. An optional profile photo is
+ * shown in the header (photos are fine for many modern/EU CV styles; leave it
+ * off for strict US ATS submissions).
  */
-export function CvTemplate({ cv }: { cv: CvData }) {
+export function CvTemplate({ cv, avatarUrl }: { cv: CvData; avatarUrl?: string | null }) {
   const name = cv.personal?.full_name || 'Your Name';
   const contact = [cv.personal?.email, cv.personal?.phone, cv.personal?.location]
     .filter(Boolean)
@@ -16,19 +18,31 @@ export function CvTemplate({ cv }: { cv: CvData }) {
       className="mx-auto max-w-[800px] bg-white p-10 text-[13px] leading-relaxed text-neutral-900"
       style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
     >
-      <header className="border-b-2 border-neutral-800 pb-3">
-        <h1 className="text-2xl font-bold tracking-tight">{name}</h1>
-        {cv.headline && <p className="mt-0.5 text-neutral-700">{cv.headline}</p>}
-        {contact && <p className="mt-1 text-xs text-neutral-600">{contact}</p>}
-        {cv.links.length > 0 && (
-          <p className="mt-1 text-xs text-neutral-600">
-            {cv.links.map((l, i) => (
-              <span key={i}>
-                {i > 0 && '  •  '}
-                {l.label}: {l.url}
-              </span>
-            ))}
-          </p>
+      {/* accent bar */}
+      <div className="mb-4 h-1.5 w-full rounded-full" style={{ background: 'linear-gradient(90deg,#2563eb,#06b6d4)' }} />
+
+      <header className="flex items-start justify-between gap-4 border-b-2 border-neutral-800 pb-3">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">{name}</h1>
+          {cv.headline && <p className="mt-0.5 text-neutral-700">{cv.headline}</p>}
+          {contact && <p className="mt-1 text-xs text-neutral-600">{contact}</p>}
+          {cv.links.length > 0 && (
+            <p className="mt-1 text-xs text-neutral-600">
+              {cv.links.map((l, i) => (
+                <span key={i}>
+                  {i > 0 && '  •  '}
+                  {l.label}: {l.url}
+                </span>
+              ))}
+            </p>
+          )}
+        </div>
+        {avatarUrl && (
+          <img
+            src={avatarUrl}
+            alt={name}
+            className="h-24 w-24 shrink-0 rounded-lg border border-neutral-300 object-cover"
+          />
         )}
       </header>
 
