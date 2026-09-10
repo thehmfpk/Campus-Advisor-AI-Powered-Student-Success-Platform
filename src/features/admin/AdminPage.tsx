@@ -136,6 +136,10 @@ function StudentsSection() {
   const setStatus = useSetStudentStatus(accessToken);
 
   const toggleDisable = async (userId: string, disabled: boolean) => {
+    if (userId.startsWith('sample-')) {
+      toast.info('This is a sample student. Real accounts can be managed here once students sign up.');
+      return;
+    }
     try {
       await setStatus.mutateAsync({ userId, disabled });
       toast.success(disabled ? 'Account disabled.' : 'Account enabled.');
