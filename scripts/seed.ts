@@ -224,6 +224,50 @@ async function seedDemoStudent() {
   }
 }
 
+/**
+ * A handful of clearly-labeled DEMO student profiles so the admin "Students"
+ * list is populated for demos. These are obvious placeholders (not real people)
+ * and use example.com emails. Password for all: DemoPass123.
+ */
+const SAMPLE_STUDENTS = [
+  { name: 'Demo Student — Ayesha Khan', email: 'demo.ayesha@example.com', roll: 'BSCS-F22-045', university: 'NUST', dept: 'Computer Science', semester: 4, skills: ['Python', 'SQL', 'Data Science'], interests: ['Data Science', 'AI/ML'] },
+  { name: 'Demo Student — Bilal Ahmed', email: 'demo.bilal@example.com', roll: 'BSSE-F21-118', university: 'FAST-NUCES', dept: 'Software Engineering', semester: 6, skills: ['JavaScript', 'React', 'Node.js', 'Git'], interests: ['Frontend', 'Full-stack'] },
+  { name: 'Demo Student — Fatima Riaz', email: 'demo.fatima@example.com', roll: 'BSCS-F23-009', university: 'LUMS', dept: 'Computer Science', semester: 2, skills: ['C++', 'Data Structures'], interests: ['Competitive Programming'] },
+  { name: 'Demo Student — Hamza Sheikh', email: 'demo.hamza@example.com', roll: 'BSEE-F20-201', university: 'UET Lahore', dept: 'Electrical Engineering', semester: 8, skills: ['C', 'Embedded', 'Linux'], interests: ['Embedded Systems'] },
+  { name: 'Demo Student — Sana Malik', email: 'demo.sana@example.com', roll: 'BSCY-F22-076', university: 'Air University', dept: 'Cyber Security', semester: 5, skills: ['Networking', 'Linux', 'Python', 'Security'], interests: ['Cyber Security'] },
+];
+
+async function seedSampleStudents() {
+  console.log('→ Seeding sample (demo) student profiles…');
+  for (const s of SAMPLE_STUDENTS) {
+    try {
+      const userId = await ensureUser(s.email, 'DemoPass123', 'student');
+      const { data: univ } = await db
+        .from('universities')
+        .select('id')
+        .eq('name', s.university)
+        .maybeSingle();
+      await db.from('student_profiles').upsert(
+        {
+          user_id: userId,
+          full_name: s.name,
+          roll_number: s.roll,
+          university_id: univ?.id ?? null,
+          university_name: s.university,
+          department_name: s.dept,
+          semester: s.semester,
+          skills: s.skills,
+          career_interests: s.interests,
+          bio: 'Sample demo profile for showcasing the platform.',
+        },
+        { onConflict: 'user_id' },
+      );
+    } catch (e) {
+      console.warn(`   Skipped ${s.email}:`, (e as Error).message);
+    }
+  }
+}
+
 async function seedAdmins() {
   if (adminEmails.length === 0) {
     console.log('→ No ADMIN_EMAILS set; skipping admin creation.');
@@ -242,9 +286,11 @@ async function main() {
   await seedNotes();
   await seedSocieties();
   await seedDemoStudent();
+  await seedSampleStudents();
   await seedAdmins();
-  console.log('\n✅ Seed complete.');
-  console.log('   Demo student → demo.student@campus-advisor.dev / DemoPass123');
+  console.log('\nSeed complete.');
+  console.log('   Demo student  -> demo.student@campus-advisor.dev / DemoPass123');
+  console.log('   Sample students-> demo.*@example.com / DemoPass123');
   if (adminEmails.length) console.log(`   Admin(s)      → ${adminEmails.join(', ')} / AdminPass123`);
 }
 
