@@ -3,12 +3,14 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import { PageLoader } from '@/components/ui';
 
-/** Requires an authenticated student (or admin). Redirects guests to login. */
+/** Requires an authenticated student. Guests -> login; admins -> admin area
+ * (admins do not use the student app). */
 export function RequireAuth({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
   const location = useLocation();
   if (loading) return <PageLoader />;
   if (!user) return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+  if (user.role === 'admin') return <Navigate to="/admin" replace />;
   return <>{children}</>;
 }
 

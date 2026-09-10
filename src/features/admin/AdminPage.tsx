@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import {
   BarChart3,
@@ -14,7 +14,6 @@ import {
   Star,
   ShieldCheck,
   LogOut,
-  ArrowLeft,
   Trash2,
   Plus,
   EyeOff,
@@ -508,11 +507,6 @@ export default function AdminPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Link to="/app/dashboard">
-              <Button variant="ghost" size="sm" className="text-white/80 hover:bg-white/10 hover:text-white">
-                <ArrowLeft className="h-4 w-4" /> Student view
-              </Button>
-            </Link>
             <ThemeToggle />
             <Button variant="secondary" size="sm" onClick={handleSignOut}>
               <LogOut className="h-4 w-4" /> Sign out
